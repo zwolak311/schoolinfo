@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/nav_main_group"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home_icon"
+            android:title="Główna" />
+
+        <item
+            android:id="@+id/nav_timetable"
+            android:icon="@drawable/calendar_icon"
+            android:title="Plan lekcji" />
+
+        <item
+            android:id="@+id/nav_add_remove_membership_class"
+            android:icon="@drawable/settings_icon"
+            android:title="Lista klas" />
+
+        <item android:title="Aplikacja">
+            <menu>
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@drawable/power_icon"
+                    android:title="Wyloguj" />
+            </menu>
+        </item>
+
+
+
+
+    </group>
+
+
+</menu>

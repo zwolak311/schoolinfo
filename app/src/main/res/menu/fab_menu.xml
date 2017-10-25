@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/action_news"
+        android:icon="@drawable/add_icon"
+        android:title="Inne" />
+
+
+    <item
+        android:id="@+id/action_exam"
+        android:icon="@drawable/add_icon"
+        android:title="Sprawdziany" />
+
+
+    <item
+        android:id="@+id/action_homework"
+        android:icon="@drawable/add_icon"
+        android:title="Prace domowe" />
+
+
+</menu>

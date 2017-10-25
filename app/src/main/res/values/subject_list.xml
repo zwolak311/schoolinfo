@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="subject_array">
+        <item>Matematyka</item>
+        <item>j polski</item>
+        <item>j angielski</item>
+        <item>j niemiecki</item>
+        <item>j włoski</item>
+        <item>Historia</item>
+        <item>Religia</item>
+        <item>WF</item>
+        <item>Dział. inf.</item>
+        <item>Sieci komp.</item>
+        <item>Proj. sieci</item>
+        <item>Programowanie</item>
+        <item>Zaj. wycho.</item>
+        <item>Sysyt. baz.</item>
+        <item>Witryny</item>
+        <item>Adm. baz.</item>
+    </string-array>
+
+
+</resources>
