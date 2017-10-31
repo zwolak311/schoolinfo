@@ -61,7 +61,7 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
     UserBaseInformation UBI;
     POJOClassInfo pojoClassInfo;
-    MainInformationAboutUserAndClass mainInformationAboutUserAndClass;
+    MainInformationAboutUserAndClass mainInformationAboutUserAndClass = new MainInformationAboutUserAndClass();
 
     TextView email, username, activeClassText;
 
@@ -90,7 +90,8 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
 
         fragmentManager = getSupportFragmentManager();
-
+        timetableTabFragment = new TimetableTabFragment();
+        groupMainFragment = new GroupMainFragment();
 
 //
 //        Check if user is log in
@@ -107,10 +108,6 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 //
 
 
-        tabFragment = new TabFragment();
-        groupMainFragment = new GroupMainFragment();
-        timetableTabFragment = new TimetableTabFragment();
-
 
         setSupportActionBar(toolbar);
 
@@ -118,6 +115,7 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
         fabSpeedDial.setMenuListener(this);
 
 
+        tabFragment = new TabFragment();
 
 
 
@@ -219,16 +217,13 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
     @Override
     public void setData(MainInformationAboutUserAndClass data) {
+        UBI = data.getUBI();
+        pojoClassInfo = data.getPojoClassInfo();
+        mainInformationAboutUserAndClass = data;
 
-        if(data != null) {
-            UBI = data.getUBI();
-            pojoClassInfo = data.getPojoClassInfo();
-            mainInformationAboutUserAndClass = data;
 
-            if (isCreateFirstTime)
-                setBaseInformation(UBI);
-        }
         Log.d("MVPMain", "setDate");
+
     }
 
 
@@ -241,47 +236,51 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
     @Override
     public void showContent() {
         super.showContent();
-        Log.d("MVPMain", "showContent");
-
-        if(mainInformationAboutUserAndClass != null) {
 
             switch (mainInformationAboutUserAndClass.getWithScreenOnTop()) {
 
                 case TabFragment.MAIN_SCREEN:
-                    if (getSupportActionBar() != null)
-                        getSupportActionBar().setTitle("school info");
 
 
-                    onNavigationItemSelected(navigationView.getMenu().getItem(TabFragment.MAIN_SCREEN));
-                    navigationView.getMenu().getItem(TabFragment.MAIN_SCREEN).setChecked(true);
+                        onNavigationItemSelected(navigationView.getMenu().getItem(TabFragment.MAIN_SCREEN));
+                        navigationView.getMenu().getItem(TabFragment.MAIN_SCREEN).setChecked(true);
 
 
                     break;
                 case TimetableTabFragment.TIMETABLE_SCREEN:
-                    if (getSupportActionBar() != null)
-                        getSupportActionBar().setTitle("Plan lekcji");
 
 
                     onNavigationItemSelected(navigationView.getMenu().getItem(TimetableTabFragment.TIMETABLE_SCREEN));
                     navigationView.getMenu().getItem(TimetableTabFragment.TIMETABLE_SCREEN).setChecked(true);
 
 
+
                     break;
                 case GroupMainFragment.GROUP_SCREEN:
-                    if (getSupportActionBar() != null)
-                        getSupportActionBar().setTitle("Lista klas");
 
 
-                    onNavigationItemSelected(navigationView.getMenu().getItem(GroupMainFragment.GROUP_SCREEN));
-                    navigationView.getMenu().getItem(GroupMainFragment.GROUP_SCREEN).setChecked(true);
+                        onNavigationItemSelected(navigationView.getMenu().getItem(GroupMainFragment.GROUP_SCREEN));
+                        navigationView.getMenu().getItem(GroupMainFragment.GROUP_SCREEN).setChecked(true);
+
+
+
 
                     break;
 
 
             }
 
-        }
+            setActionbarName();
+
+        if (isCreateFirstTime && !mainInformationAboutUserAndClass.isDateEmpty())
+            setBaseInformation(UBI);
+
+
+
+
         isCreateFirstTime = false;
+        Log.d("MVPMain", "showContent");
+
     }
 
 
@@ -289,14 +288,15 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
     @Override
     protected String getErrorMessage(Throwable e, boolean pullToRefresh) {
-        mainInformationAboutUserAndClass = null;
+//        mainInformationAboutUserAndClass = null;
+
+
+        Log.d("MVPMain", "error");
+
+
+        showContent();
 
         setUserInfoFromFile();
-
-
-
-        tabFragment.setMainInformationAboutUserAndClass(null);
-
 
         return "Sprawdż połączenie z internetem.";
     }
@@ -343,14 +343,6 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
 
 
-
-    @Override
-    public void networkNotAvailable(String s) {
-
-        tabFragment.refreshPojoClass(null);
-        setUserInfoFromFile();
-
-    }
 
 
 
@@ -443,20 +435,25 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
         if (id == R.id.nav_home) {
 
 
             fabSpeedDial.show();
 
-
             if(!isCreateFirstTime)
                 presenter.setTopScreen(TabFragment.MAIN_SCREEN);
 
 
-            fragmentManager.beginTransaction().replace(R.id.content_main, tabFragment).commit();
 
-            tabFragment.setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
+            if(tabFragment.isVisible()){
+                tabFragment.setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
+            }else {
+                fragmentManager.beginTransaction().replace(R.id.content_main, tabFragment).commit();
+            }
 
+
+//            tabFragment.setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
 
         } else if (id == R.id.nav_timetable) {
 
@@ -472,12 +469,18 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
         }else if(id == R.id.nav_add_remove_membership_class){
 
+
             fabSpeedDial.hide();
 
             presenter.setTopScreen(GroupMainFragment.GROUP_SCREEN);
 
 
-            fragmentManager.beginTransaction().replace(R.id.content_main, groupMainFragment).commit();
+            if(groupMainFragment.isVisible()){
+                groupMainFragment.setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
+            }else {
+                fragmentManager.beginTransaction().replace(R.id.content_main, groupMainFragment).commit();
+            }
+//            groupMainFragment.getPresenter().setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
 
 
         } else if (id == R.id.nav_logout) {
@@ -489,6 +492,10 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
             loadData(true);
         }
+
+
+
+        setActionbarName();
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -506,15 +513,12 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
                     if (UBI.getGroups().get(i).getGroupname().equals(ACTIVE_USER_CLASS))
                         activeClassText.setText(UBI.getGroups().get(i).getName());
 
-            navigationView.getMenu().getItem(0).setEnabled(true);
-            navigationView.getMenu().getItem(0).setChecked(true);
-            onNavigationItemSelected(navigationView.getMenu().getItem(0));
         }else {
 
             ACTIVE_USER_CLASS = null;
             navigationView.getMenu().getItem(0).setEnabled(false);
             navigationView.getMenu().getItem(1).setChecked(true);
-            onNavigationItemSelected(navigationView.getMenu().getItem(2));
+            onNavigationItemSelected(navigationView.getMenu().getItem(1));
 
         }
     }
@@ -710,6 +714,9 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
         setupNavigationClassItems(UBI);
 
+        mainInformationAboutUserAndClass = new MainInformationAboutUserAndClass();
+        mainInformationAboutUserAndClass.setDateEmpty(true);
+
         setActiveUserClass();
     }
 
@@ -719,7 +726,41 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 //
 
 
+    void setActionbarName(){
 
+        if(mainInformationAboutUserAndClass!= null) {
+            switch (mainInformationAboutUserAndClass.getWithScreenOnTop()) {
+
+                case TabFragment.MAIN_SCREEN:
+
+
+                    if (getSupportActionBar() != null)
+                        getSupportActionBar().setTitle("school info");
+
+
+                    break;
+                case TimetableTabFragment.TIMETABLE_SCREEN:
+
+                    if (getSupportActionBar() != null)
+                        getSupportActionBar().setTitle("Plan lekcji");
+
+                    break;
+
+                case GroupMainFragment.GROUP_SCREEN:
+
+
+                    if (getSupportActionBar() != null)
+                        getSupportActionBar().setTitle("Lista klas");
+
+
+                    break;
+
+            }
+        }else {
+            if (getSupportActionBar() != null)
+                getSupportActionBar().setTitle("school info");
+        }
+    }
 
     @Override
     public void onBackPressed() {

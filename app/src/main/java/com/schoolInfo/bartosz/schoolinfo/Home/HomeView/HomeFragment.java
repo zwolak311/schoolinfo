@@ -83,13 +83,22 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
     public void onResume() {
         super.onResume();
 
-        if(tabFragment.getMainInformationAboutUserAndClass() != null)
+        if(!tabFragment.getMainInformationAboutUserAndClass().isDateEmpty())
             presenter.setDate(tabFragment.getMainInformationAboutUserAndClass());
         else
             networkNotAvailable();
         isCreated = true;
 
 
+    }
+
+
+    @Override
+    public void onPause() {
+
+        swipeRefreshLayout.setRefreshing(false);
+
+        super.onPause();
     }
 
     @OnClick(R.id.retryUnderIconText)
@@ -218,7 +227,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
             @BindView(R.id.homeworkExamSubject) TextView subject;
             @BindView(R.id.homeworkExamContent) TextView content;
             @BindView(R.id.homeworkExamDate) TextView date;
-//            @BindView(R.id.typeOfInfo) TextView typeOfInfo;
+            @BindView(R.id.typeOfInfo) TextView typeOfInfo;
             @BindView(R.id.homeworkExamTextViewForOnClick) TextView textViewForOnClick;
             @BindView(R.id.homeworkExamSpace) Space space;
 //            @BindView(R.id.homeworkExamAcceptIcon) ImageView acceptIcon;
@@ -300,9 +309,9 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                 } else {
 
                     viewHolderInfo.subject.setText(information.get((position - 2 - subjectList.size())).getSubject());
-                    viewHolderInfo.date.setText(information.get((position - 2 - subjectList.size())).getDate()  + "        " +
-                            information.get(position - 2 - subjectList.size()).getType());
+                    viewHolderInfo.date.setText(information.get((position - 2 - subjectList.size())).getDate());
                     viewHolderInfo.content.setText(information.get((position - 2 - subjectList.size())).getContent());
+                    viewHolderInfo.typeOfInfo.setText(information.get(position - 2 - subjectList.size()).getType());
 //                    viewHolderInfo.typeOfInfo.setText(information.get((position - 2 - subjectList.size())).getType());
 
                     if (position == subjectList.size() + information.size() + 1)

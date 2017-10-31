@@ -65,8 +65,6 @@ public class MainInformationFragment extends MvpFragment<MainInformationView, Ma
 
         ButterKnife.bind(this, view);
 
-        Log.d("MVPMain", "create_fragment");
-
 
         tabFragment = (TabFragment) getParentFragment();
 
@@ -114,6 +112,8 @@ public class MainInformationFragment extends MvpFragment<MainInformationView, Ma
     public void onPause() {
         super.onPause();
 
+
+        swipeRefreshLayout.setRefreshing(false);
         hideCircle();
     }
 
@@ -334,7 +334,7 @@ public class MainInformationFragment extends MvpFragment<MainInformationView, Ma
             @BindView(R.id.homeworkExamSubject) TextView subject;
             @BindView(R.id.homeworkExamContent) TextView content;
             @BindView(R.id.homeworkExamDate) TextView date;
-//            @BindView(R.id.typeOfInfo) TextView typeOfInfo;
+            @BindView(R.id.typeOfInfo) TextView typeOfInfo;
             @BindView(R.id.homeworkExamTextViewForOnClick) TextView textViewForOnClick;
             @BindView(R.id.homeworkExamSpace) Space space;
 //            @BindView(R.id.homeworkExamAcceptIcon) ImageView acceptIcon;
@@ -466,9 +466,8 @@ public class MainInformationFragment extends MvpFragment<MainInformationView, Ma
 
             holder.subject.setText(informationList.get(fixedPosition).getSubject());
             holder.content.setText(informationList.get(fixedPosition).getContent());
-            holder.date.setText(informationList.get(fixedPosition).getDate() + "     " +
-                            informationList.get(position).getType()
-                    );
+            holder.date.setText(informationList.get(fixedPosition).getDate());
+            holder.typeOfInfo.setText(informationList.get(position).getType());
 //            holder.typeOfInfo.setText(informationList.get(position).getType());
 
         }

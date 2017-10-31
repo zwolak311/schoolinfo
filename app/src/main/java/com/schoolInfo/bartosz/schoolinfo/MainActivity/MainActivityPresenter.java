@@ -33,12 +33,15 @@ public class MainActivityPresenter extends MvpBasePresenter<MainActivityView> {
     private RestInterface api;
     private Calendar calendar;
     private String token;
-    MainInformationAboutUserAndClass mainInformationAboutUserAndClass = new MainInformationAboutUserAndClass();
+    MainInformationAboutUserAndClass mainInformationAboutUserAndClass;
 
 
 
     MainActivityPresenter() {
         super();
+
+        mainInformationAboutUserAndClass = new MainInformationAboutUserAndClass();
+        mainInformationAboutUserAndClass.setDateEmpty(true);
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -88,10 +91,14 @@ public class MainActivityPresenter extends MvpBasePresenter<MainActivityView> {
 
             @Override
             public void onFailure(@NonNull Call<UserBaseInformation> call, @NonNull Throwable t) {
+                mainInformationAboutUserAndClass = new MainInformationAboutUserAndClass();
 
-                if(getView() != null)
+//                mainInformationAboutUserAndClass.setDateEmpty(true);
+
+                if(getView() != null) {
+                    getView().setData(mainInformationAboutUserAndClass);
                     getView().showError(t, true);
-//                    getView().networkNotAvailable(t.toString());
+                }
 
             }
         });
@@ -100,7 +107,7 @@ public class MainActivityPresenter extends MvpBasePresenter<MainActivityView> {
     }
 
 
-    void getInfoAboutClass(String className){
+    private void getInfoAboutClass(String className){
 
         Call<POJOClassInfo> getClassInformation = api.getClassInformation(className, new Token(token));
 
@@ -111,25 +118,30 @@ public class MainActivityPresenter extends MvpBasePresenter<MainActivityView> {
 
                 mainInformationAboutUserAndClass.setUBI(UBI);
                 mainInformationAboutUserAndClass.setPojoClassInfo(pojoClassInfo);
+                mainInformationAboutUserAndClass.setDateEmpty(false);
 
                 if(getView() != null) {
                     getView().setData(mainInformationAboutUserAndClass);
                     getView().showContent();
-//                    getView().setClassInformation(response.body());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<POJOClassInfo> call, @NonNull Throwable t) {
+                mainInformationAboutUserAndClass = new MainInformationAboutUserAndClass();
+//                mainInformationAboutUserAndClass.setDateEmpty(true);
 
-                if(getView() != null)
+                if(getView() != null) {
+                    getView().setData(mainInformationAboutUserAndClass);
                     getView().showError(t, true);
-//                    getView().networkNotAvailable(t.toString());
 
+                }
 
             }
         });
     }
+
+
 
 
     public void sendInfo(InfoAndToken infoAndToken){
@@ -215,7 +227,6 @@ public class MainActivityPresenter extends MvpBasePresenter<MainActivityView> {
         mainInformationAboutUserAndClass.setWithScreenOnTop(topScreenNumb);
 
         getView().setData(mainInformationAboutUserAndClass);
-
     }
 
     public MainInformationAboutUserAndClass getMainInformationAboutUserAndClass() {

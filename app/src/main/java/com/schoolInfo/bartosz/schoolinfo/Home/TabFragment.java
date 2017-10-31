@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,11 +62,6 @@ public class TabFragment extends Fragment {
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.refreshOptionMenu(false);
 
-//        try{
-//            MainActivity mainActivity = (MainActivity) getActivity();
-//            mainActivity.refreshUBI();
-//        }catch (Exception ignored){}
-
     }
 
     @Nullable
@@ -84,29 +80,10 @@ public class TabFragment extends Fragment {
 
         setupViewPager(viewPager);
 
-//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//                enableDisableSwipeRefresh( state == ViewPager.SCROLL_STATE_IDLE );
-//            }
-//        });
-
-
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.mipmap.home_image_third);
         tabLayout.getTabAt(1).setIcon(R.mipmap.book_first_try);
-//        tabLayout.getTabAt(2).setIcon(R.mipmap.timetable_image_second);
         tabLayout.getTabAt(2).setIcon(R.mipmap.people_image_second);
 
         return view;
@@ -116,7 +93,8 @@ public class TabFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-
+        MainActivity mainActivity = (MainActivity) getActivity();
+        setMainInformationAboutUserAndClass(mainActivity.getPresenter().getMainInformationAboutUserAndClass());
     }
 
 

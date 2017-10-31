@@ -6,6 +6,15 @@ public class MainInformationAboutUserAndClass {
     POJOClassInfo pojoClassInfo = new POJOClassInfo();
     UserBaseInformation UBI = new UserBaseInformation();
     int withScreenOnTop = 0;
+    boolean isDateEmpty = true;
+
+    public boolean isDateEmpty() {
+        return isDateEmpty;
+    }
+
+    public void setDateEmpty(boolean dateEmpty) {
+        isDateEmpty = dateEmpty;
+    }
 
     public int getWithScreenOnTop() {
         return withScreenOnTop;

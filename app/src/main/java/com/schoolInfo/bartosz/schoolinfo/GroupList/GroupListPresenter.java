@@ -1,6 +1,7 @@
 package com.schoolInfo.bartosz.schoolinfo.GroupList;
 
 import com.schoolInfo.bartosz.schoolinfo.MainActivity.MainActivity;
+import com.schoolInfo.bartosz.schoolinfo.Rest.MainInformationAboutUserAndClass;
 import com.schoolInfo.bartosz.schoolinfo.Rest.Requests;
 import com.schoolInfo.bartosz.schoolinfo.Rest.RestInterface;
 import com.schoolInfo.bartosz.schoolinfo.Rest.Status;
@@ -26,6 +27,7 @@ public class GroupListPresenter extends MvpBasePresenter<GroupListView> {
     Token token;
     Status status;
     Requests requests;
+    MainInformationAboutUserAndClass mainInformationAboutUserAndClass;
 
     public GroupListPresenter() {
 
@@ -92,12 +94,12 @@ public class GroupListPresenter extends MvpBasePresenter<GroupListView> {
             public void onResponse(Call<Requests> call, Response<Requests> response) {
                 requests = response.body();
 
-                if(getView() != null ) {
-                    if (status != null && requests != null)
+//                if(getView() != null ) {
+//                    if (status != null || requests != null)
                         getView().setGroupList(status, requests);
-                    else
-                        getView().networkNotAvailable();
-                }
+//                    else
+//                        getView().networkNotAvailable();
+//                }
             }
 
             @Override
@@ -140,4 +142,18 @@ public class GroupListPresenter extends MvpBasePresenter<GroupListView> {
 
 
     }
+
+
+    public void setMainInformationAboutUserAndClass(MainInformationAboutUserAndClass mainInformationAboutUserAndClass) {
+        this.mainInformationAboutUserAndClass = mainInformationAboutUserAndClass;
+
+        if(mainInformationAboutUserAndClass.isDateEmpty())
+            getView().networkNotAvailable();
+        else
+            getView().setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
+    }
+
+
+
+
 }

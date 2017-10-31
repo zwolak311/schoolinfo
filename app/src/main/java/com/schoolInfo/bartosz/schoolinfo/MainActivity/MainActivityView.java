@@ -12,9 +12,10 @@ public interface MainActivityView extends MvpLceView<MainInformationAboutUserAnd
 
     void setClassInformation(POJOClassInfo postClass);
     void setBaseInformation(UserBaseInformation userInformation);
-    void networkNotAvailable(String s);
     void getInfoForDelete();
 //    void refreshUBI();
 
 
+    @Override
+    void loadData(boolean pullToRefresh);
 }

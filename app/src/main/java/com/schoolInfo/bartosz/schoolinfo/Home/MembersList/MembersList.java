@@ -86,6 +86,13 @@ public class MembersList extends MvpFragment<MembersView, MembersPresenter> impl
     }
 
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
     @OnClick(R.id.retryUnderIconText)
     public void refreshButton(){
 

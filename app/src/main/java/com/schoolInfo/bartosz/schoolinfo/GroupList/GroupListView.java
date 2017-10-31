@@ -1,5 +1,6 @@
 package com.schoolInfo.bartosz.schoolinfo.GroupList;
 
+import com.schoolInfo.bartosz.schoolinfo.Rest.MainInformationAboutUserAndClass;
 import com.schoolInfo.bartosz.schoolinfo.Rest.Requests;
 import com.schoolInfo.bartosz.schoolinfo.Rest.Status;
 import com.hannesdorfmann.mosby.mvp.MvpView;
@@ -14,4 +15,6 @@ public interface GroupListView extends MvpView {
     void networkNotAvailable();
 
     void getUBI();
+
+    void setMainInformationAboutUserAndClass(MainInformationAboutUserAndClass mainInformationAboutUserAndClass);
 }

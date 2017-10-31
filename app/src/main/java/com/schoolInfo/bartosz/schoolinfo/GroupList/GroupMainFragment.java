@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.schoolInfo.bartosz.schoolinfo.MainActivity.MainActivity;
 import com.schoolInfo.bartosz.schoolinfo.R;
+import com.schoolInfo.bartosz.schoolinfo.Rest.MainInformationAboutUserAndClass;
 import com.schoolInfo.bartosz.schoolinfo.Rest.Requests;
 import com.schoolInfo.bartosz.schoolinfo.Rest.Status;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
@@ -47,7 +48,7 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
     GroupListAdapter groupListAdapter;
     Status status;
     Requests requests;
-    UserBaseInformation UBI;
+    MainInformationAboutUserAndClass mainInformationAboutUserAndClass;
 
 
     @Nullable
@@ -58,7 +59,7 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
 
 
 
-        MainActivity mainActivity = (MainActivity) getActivity();
+        final MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.refreshOptionMenu(false);
 
 
@@ -73,18 +74,18 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
 
         swipeRefreshLayout.setRefreshing(true);
 
-        final MainActivity m = (MainActivity) getActivity();
-        UBI = m.getPresenter().getUBI();
+
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
-                MainActivity mainActivity = (MainActivity) getActivity();
-//                mainActivity.refreshUBI();
-                mainActivity.loadData(true);
 
-                presenter.getGroupList();
+                if(mainActivity.getPresenter().getMainInformationAboutUserAndClass().isDateEmpty()) {
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    mainActivity.loadData(true);
+                }else
+                    presenter.getGroupList();
 
             }
         });
@@ -97,12 +98,24 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
 
     @Override
     public void onResume() {
-
-        presenter.getGroupList();
+//
+        final MainActivity m = (MainActivity) getActivity();
+        setMainInformationAboutUserAndClass(m.getPresenter().getMainInformationAboutUserAndClass());
 
         super.onResume();
     }
 
+//    public void setMainInformationAboutUserAndClass(MainInformationAboutUserAndClass mainInformationAboutUserAndClass) {
+//        this.mainInformationAboutUserAndClass = mainInformationAboutUserAndClass;
+//    }
+
+
+    @Override
+    public void setMainInformationAboutUserAndClass(MainInformationAboutUserAndClass mainInformationAboutUserAndClass) {
+        this.mainInformationAboutUserAndClass = mainInformationAboutUserAndClass;
+        presenter.getGroupList();
+
+    }
 
     @OnClick(R.id.retryUnderIconText)
     void retry(){
@@ -142,6 +155,12 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
 
     @Override
     public void networkNotAvailable() {
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainInformationAboutUserAndClass.setDateEmpty(true);
+        mainActivity.setData(mainInformationAboutUserAndClass);
+
+
         recyclerView.setVisibility(View.GONE);
 
         faceImage.setImageResource(R.drawable.cloud_off);
@@ -252,7 +271,7 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
 
                 itemViewHolder.groupName.setText(status.getMessage().get(position - 1).getName());
 
-                for (UserBaseInformation.Group group:UBI.getGroups() ) {
+                for (UserBaseInformation.Group group: mainInformationAboutUserAndClass.getUBI().getGroups() ) {
                     if(group.getId() == status.getMessage().get(position - 1).getId()){
                         itemViewHolder.addToGroup.setBackgroundColor(getResources().getColor(R.color.colorMediumGray));
                         itemViewHolder.addToGroup.setEnabled(false);

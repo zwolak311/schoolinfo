@@ -14,8 +14,9 @@ import java.util.List;
 
 
 public class HomePresenter extends MvpBasePresenter<HomeView> {
-    private POJOClassInfo pojoClassInfo;
-    private UserBaseInformation UBI;
+//    private POJOClassInfo pojoClassInfo;
+//    private UserBaseInformation UBI;
+    private MainInformationAboutUserAndClass mainInformationAboutUserAndClass;
 
 
     HomePresenter() {
@@ -30,17 +31,21 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
 
 
     public void setDate(MainInformationAboutUserAndClass mainInformationAboutUserAndClass){
-        if(mainInformationAboutUserAndClass != null) {
+//        if(mainInformationAboutUserAndClass != null) {
 
-            this.UBI = mainInformationAboutUserAndClass.getUBI();
-            this.pojoClassInfo = mainInformationAboutUserAndClass.getPojoClassInfo();
-        }
+        this.mainInformationAboutUserAndClass = mainInformationAboutUserAndClass;
+
+//            this.UBI = mainInformationAboutUserAndClass.getUBI();
+//            this.pojoClassInfo = mainInformationAboutUserAndClass.getPojoClassInfo();
+//        }else {
+
+//        }
         setTimetable();
 
     }
 
     private void setCorrectDateForView(int daysToAdd, String dayOfWeek, List<String> subjects, List<String> classList){
-        if(pojoClassInfo != null) {
+        if(!mainInformationAboutUserAndClass.isDateEmpty()) {
 
             ArrayList<POJOClassInfo.Information> informationArrayList = new ArrayList<>();
 
@@ -50,11 +55,11 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
 
             cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) + daysToAdd);
 
-            for (int i = 0; i < pojoClassInfo.getInformations().size(); i++) {
+            for (int i = 0; i < mainInformationAboutUserAndClass.getPojoClassInfo().getInformations().size(); i++) {
 
 
                 try {
-                    calendar.setTime(df.parse(pojoClassInfo.getInformations().get(i).getDate()));
+                    calendar.setTime(df.parse(mainInformationAboutUserAndClass.getPojoClassInfo().getInformations().get(i).getDate()));
                 } catch (ParseException e) {
                     if(getView()!= null)
                         getView().showToast(e.toString());
@@ -64,9 +69,9 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
                 if (calendar.get(Calendar.YEAR) == cal.get(Calendar.YEAR) &&
                         calendar.get(Calendar.MONTH) == cal.get(Calendar.MONTH) &&
                         cal.get(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH) &&
-                        pojoClassInfo.getInformations().get(i).getVisibility() == 1) {
+                        mainInformationAboutUserAndClass.getPojoClassInfo().getInformations().get(i).getVisibility() == 1) {
 
-                    informationArrayList.add(pojoClassInfo.getInformations().get(i));
+                    informationArrayList.add(mainInformationAboutUserAndClass.getPojoClassInfo().getInformations().get(i));
                 }
             }
 
@@ -205,7 +210,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
 
                 case Calendar.MONDAY:
 
-                    if(cal.get(Calendar.HOUR_OF_DAY) > 15)
+                    if(cal.get(Calendar.HOUR_OF_DAY) > 14)
                         setCorrectDateForView(1, listDataHeader.get(1), wtorek, wtorekClass);
                     else
                         setCorrectDateForView(0, listDataHeader.get(0), poniedzialek, poniedziałekClass);
@@ -213,7 +218,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
                     break;
                 case Calendar.TUESDAY:
 
-                    if(cal.get(Calendar.HOUR_OF_DAY) > 15)
+                    if(cal.get(Calendar.HOUR_OF_DAY) > 14)
                         setCorrectDateForView(1, listDataHeader.get(2), sroda, srodaClass);
                     else
                         setCorrectDateForView(0, listDataHeader.get(1), wtorek, wtorekClass);
@@ -221,7 +226,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
                     break;
                 case Calendar.WEDNESDAY:
 
-                    if(cal.get(Calendar.HOUR_OF_DAY) > 15)
+                    if(cal.get(Calendar.HOUR_OF_DAY) > 14)
                         setCorrectDateForView(1, listDataHeader.get(3), czwartek, czwartekClass);
                     else
                         setCorrectDateForView(0, listDataHeader.get(2), sroda, srodaClass);
@@ -230,7 +235,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
                 case Calendar.THURSDAY:
 
 
-                    if(cal.get(Calendar.HOUR_OF_DAY) > 15)
+                    if(cal.get(Calendar.HOUR_OF_DAY) > 14)
                         setCorrectDateForView(1, listDataHeader.get(4), piatek, piatekClass);
                     else
                         setCorrectDateForView(0, listDataHeader.get(3), czwartek, czwartekClass);
@@ -238,7 +243,7 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
                     break;
                 case Calendar.FRIDAY:
 
-                    if(cal.get(Calendar.HOUR_OF_DAY) > 15)
+                    if(cal.get(Calendar.HOUR_OF_DAY) > 14)
                         setCorrectDateForView(3, listDataHeader.get(0), poniedzialek, poniedziałekClass);
                     else
                         setCorrectDateForView(0, listDataHeader.get(4), piatek, piatekClass);

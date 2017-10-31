@@ -24,7 +24,7 @@ public class MainInformationPresenter extends MvpBasePresenter<MainInformationVi
         if (getView() != null) {
 
 
-            if(mainInformationAboutUserAndClass != null) {
+            if(!mainInformationAboutUserAndClass.isDateEmpty()) {
                 this.pojoClassInfo = mainInformationAboutUserAndClass.getPojoClassInfo();
                 this.UBI = mainInformationAboutUserAndClass.getUBI();
 

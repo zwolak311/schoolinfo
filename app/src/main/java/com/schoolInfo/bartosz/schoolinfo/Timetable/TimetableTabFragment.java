@@ -87,7 +87,7 @@ public class TimetableTabFragment extends Fragment {
 
             case Calendar.MONDAY:
 
-                if(cal.get(Calendar.HOUR_OF_DAY) > 15)
+                if(cal.get(Calendar.HOUR_OF_DAY) > 14)
                     viewPager.setCurrentItem(1);
                 else
                     viewPager.setCurrentItem(0);
@@ -95,7 +95,7 @@ public class TimetableTabFragment extends Fragment {
                 break;
             case Calendar.TUESDAY:
 
-                if(cal.get(Calendar.HOUR_OF_DAY) > 15)
+                if(cal.get(Calendar.HOUR_OF_DAY) > 14)
                     viewPager.setCurrentItem(2);
                 else
                     viewPager.setCurrentItem(1);
@@ -104,7 +104,7 @@ public class TimetableTabFragment extends Fragment {
                 break;
             case Calendar.WEDNESDAY:
 
-                if(cal.get(Calendar.HOUR_OF_DAY) > 15)
+                if(cal.get(Calendar.HOUR_OF_DAY) > 14)
                     viewPager.setCurrentItem(3);
 
                 else
@@ -115,7 +115,7 @@ public class TimetableTabFragment extends Fragment {
             case Calendar.THURSDAY:
 
 
-                if(cal.get(Calendar.HOUR_OF_DAY) > 15)
+                if(cal.get(Calendar.HOUR_OF_DAY) > 14)
                     viewPager.setCurrentItem(4);
 
                 else
@@ -124,7 +124,7 @@ public class TimetableTabFragment extends Fragment {
                 break;
             case Calendar.FRIDAY:
 
-                if(cal.get(Calendar.HOUR_OF_DAY) > 15)
+                if(cal.get(Calendar.HOUR_OF_DAY) > 14)
                     viewPager.setCurrentItem(0);
 
                 else
