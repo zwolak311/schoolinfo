@@ -14,8 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
+import com.schoolInfo.bartosz.schoolinfo.MainActivity.MainActivity;
 import com.schoolInfo.bartosz.schoolinfo.R;
-import com.schoolInfo.bartosz.schoolinfo.Timetable.OneDayInCalendar.EditTimetableItem.TimetableEditItemActivity;
+import com.schoolInfo.bartosz.schoolinfo.Rest.SubjectList;
+import com.schoolInfo.bartosz.schoolinfo.Rest.TimetableField;
+import com.schoolInfo.bartosz.schoolinfo.Rest.TimetableMainInformation;
+import com.schoolInfo.bartosz.schoolinfo.Timetable.OneDayInCalendar.AddEditDialog.TimetableAddEditDialog;
 import com.schoolInfo.bartosz.schoolinfo.Timetable.TimetableTabFragment;
 
 import java.util.ArrayList;
@@ -51,14 +55,27 @@ public class TimetableFragment extends MvpFragment<TimetableView, TimetablePrese
         View view = inflater.inflate(R.layout.recycle_layout, container, false);
         ButterKnife.bind(this, view);
 
-        swipeRefreshLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorLightGray));
+//        swipeRefreshLayout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorLightGray));
 
         subjects = new ArrayList<>();
         classNumb = new ArrayList<>();
 
-        swipeRefreshLayout.setEnabled(false);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.loadData(false);
+
+            }
+        });
 
         return view;
+    }
+
+
+    public void setRefreshing(boolean refreshing){
+        swipeRefreshLayout.setRefreshing(refreshing);
     }
 
     @Override
@@ -66,11 +83,7 @@ public class TimetableFragment extends MvpFragment<TimetableView, TimetablePrese
         super.onResume();
 
         presenter.getDate();
-        Adapter adapter = new Adapter();
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter);
 
     }
 
@@ -83,7 +96,7 @@ public class TimetableFragment extends MvpFragment<TimetableView, TimetablePrese
     @Override
     public void showToast(String s) {
 
-        Toast.makeText(getActivity(), ""  + s , Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(),""  + s , Toast.LENGTH_SHORT).show();
 
     }
 
@@ -96,11 +109,40 @@ public class TimetableFragment extends MvpFragment<TimetableView, TimetablePrese
 
     }
 
+
+    @Override
+    public void setTimetableEditDate(int subject, int dayId, int sort, String classNum) {
+
+
+        TimetableAddEditDialog timetableAddEdit = new TimetableAddEditDialog().newInstance(subject, dayId, sort, classNum);
+        timetableAddEdit.show(getChildFragmentManager(), "edit timetable field");
+
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        Toast.makeText(getActivity(), "" + data.getIntExtra("id", -1), Toast.LENGTH_SHORT).show();
+
+
+    }
+
     @Override
     public void setDate(List<String> subjects, List<String> classNumb,  List<String> lisTime) {
         this.subjects = subjects;
         this.classNumb = classNumb;
         this.listTime = lisTime;
+
+        Adapter adapter = new Adapter();
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
+
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -125,11 +167,8 @@ public class TimetableFragment extends MvpFragment<TimetableView, TimetablePrese
             @OnClick(R.id.cardView2)
             void onClick(){
 
-                Toast.makeText(getActivity(), "Edytowaine dostepne wkrótce.", Toast.LENGTH_SHORT).show();
+                presenter.editTimetable(getAdapterPosition());
 
-//                Intent intent = new Intent(getActivity(), TimetableEditItemActivity.class);
-//                intent.putExtra("id", "jakieś coś ");
-//                startActivity(intent);
 
             }
         }
@@ -146,7 +185,7 @@ public class TimetableFragment extends MvpFragment<TimetableView, TimetablePrese
             @OnClick(R.id.timetableAddCard)
             void add(){
 
-                Toast.makeText(getActivity(), "Funkcja dostepna wkrótce.", Toast.LENGTH_SHORT).show();
+                presenter.editTimetable(getAdapterPosition());
 
             }
 

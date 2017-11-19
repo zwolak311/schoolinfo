@@ -40,7 +40,7 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
     @BindView(R.id.retryUnderIconText) TextView retryUnderIconText;
 
 
-    public static final int GROUP_SCREEN = 2;
+    public static final int GROUP_SCREEN = 4;
 
 
 
@@ -68,9 +68,9 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
 
         linear = new LinearLayoutManager(getActivity());
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                linear.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+//                linear.getOrientation());
+//        recyclerView.addItemDecoration(dividerItemDecoration);
 
         swipeRefreshLayout.setRefreshing(true);
 
@@ -84,9 +84,9 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
                 if(mainActivity.getPresenter().getMainInformationAboutUserAndClass().isDateEmpty()) {
                     MainActivity mainActivity = (MainActivity) getActivity();
                     mainActivity.loadData(true);
+
                 }else
                     presenter.getGroupList();
-
             }
         });
 
@@ -189,6 +189,12 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
 
     }
 
+    public void setRefreshing(boolean b) {
+
+        swipeRefreshLayout.setRefreshing(true);
+
+    }
+
     class GroupListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         LayoutInflater layoutInflater;
         private static final int TYPE_HEADER = 0;
@@ -206,19 +212,6 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
                 super(itemView);
                 ButterKnife.bind(this, itemView);
             }
-
-
-            @OnClick(R.id.addNewGroup)
-            void addToGroup(){
-
-                Toast.makeText(getActivity(), "Funkcja dostepna wkrótce.", Toast.LENGTH_SHORT).show();
-
-
-//                AddNewClassDialog addedDialogNews = new AddNewClassDialog();
-//                addedDialogNews.show(getChildFragmentManager(), "Stwórz nową klasę");;
-
-            }
-
 
         }
 
@@ -238,7 +231,7 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
             void addToGroup(){
 
                 swipeRefreshLayout.setRefreshing(true);
-                presenter.addToGroup(getAdapterPosition() - 1);
+                presenter.addToGroup(getAdapterPosition() - 0);
 
             }
 
@@ -269,11 +262,11 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
             }else if(holder instanceof ItemViewHolder){
                 ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
 
-                itemViewHolder.groupName.setText(status.getMessage().get(position - 1).getName());
+                itemViewHolder.groupName.setText(status.getMessage().get(position - 0).getName());
 
                 for (UserBaseInformation.Group group: mainInformationAboutUserAndClass.getUBI().getGroups() ) {
-                    if(group.getId() == status.getMessage().get(position - 1).getId()){
-                        itemViewHolder.addToGroup.setBackgroundColor(getResources().getColor(R.color.colorMediumGray));
+                    if(group.getId() == status.getMessage().get(position - 0).getId()){
+                        itemViewHolder.addToGroup.setBackgroundColor(getResources().getColor(R.color.colorGray));
                         itemViewHolder.addToGroup.setEnabled(false);
                         itemViewHolder.requestInfo.setVisibility(View.VISIBLE);
                         itemViewHolder.requestInfoText.setText("Należysz do tej klasy.");
@@ -283,8 +276,8 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
                 for (Requests.Message request: requests.getMessage()) {
 
                     if(request.getGroup() != null) {
-                        if (request.getGroup().getId() == status.getMessage().get(position - 1).getId()) {
-                            itemViewHolder.addToGroup.setBackgroundColor(getResources().getColor(R.color.colorMediumGray));
+                        if (request.getGroup().getId() == status.getMessage().get(position - 0).getId()) {
+                            itemViewHolder.addToGroup.setBackgroundColor(getResources().getColor(R.color.colorGray));
                             itemViewHolder.addToGroup.setEnabled(false);
                             itemViewHolder.requestInfo.setVisibility(View.VISIBLE);
                             itemViewHolder.requestInfoText.setText("Wysłano prośbę o dodanie do klasy.");
@@ -303,15 +296,15 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
 
         @Override
         public int getItemViewType(int position) {
-            if (position == 0) {
-                return TYPE_HEADER;
-            }
+//            if (position == 0) {
+//                return TYPE_HEADER;
+//            }
             return TYPE_ITEM;
         }
 
         @Override
         public int getItemCount() {
-            return status.getMessage().size() + 1;
+            return status.getMessage().size();
         }
     }
 

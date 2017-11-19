@@ -1,11 +1,11 @@
 package com.schoolInfo.bartosz.schoolinfo.MainActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenu;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -17,13 +17,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.MvpLceViewStateActivity;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
-import com.schoolInfo.bartosz.schoolinfo.AddedInfo.AddedDialog;
+import com.schoolInfo.bartosz.schoolinfo.Home.MainInformation.AddedInfo.AddedDialog;
+import com.schoolInfo.bartosz.schoolinfo.Grade.AddGrade;
+import com.schoolInfo.bartosz.schoolinfo.Grade.GradeFragment;
+import com.schoolInfo.bartosz.schoolinfo.GroupList.AddNewClassDialog;
 import com.schoolInfo.bartosz.schoolinfo.GroupList.GroupMainFragment;
 import com.schoolInfo.bartosz.schoolinfo.Home.TabFragment;
 import com.schoolInfo.bartosz.schoolinfo.LogInAndRegister.LoginRegisterActivity;
@@ -31,15 +35,16 @@ import com.schoolInfo.bartosz.schoolinfo.R;
 import com.schoolInfo.bartosz.schoolinfo.Rest.MainInformationAboutUserAndClass;
 import com.schoolInfo.bartosz.schoolinfo.Rest.POJOClassInfo;
 import com.schoolInfo.bartosz.schoolinfo.Rest.UserBaseInformation;
+import com.schoolInfo.bartosz.schoolinfo.Subjects.AddSubject;
+import com.schoolInfo.bartosz.schoolinfo.Subjects.SubjectsFragment;
 import com.schoolInfo.bartosz.schoolinfo.Timetable.TimetableTabFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 
 public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInformationAboutUserAndClass,MainActivityView, MainActivityPresenter> implements
-        NavigationView.OnNavigationItemSelectedListener, FabSpeedDial.MenuListener ,MainActivityView {
+        NavigationView.OnNavigationItemSelectedListener, FabSpeedDial.MenuListener , FloatingActionButton.OnClickListener ,MainActivityView {
     boolean isMainGroupVisible = true;
     boolean witchCircle = false;
     boolean isCreateFirstTime = true;
@@ -57,7 +62,7 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
 
 
-    public static final int NAV_ITEM_COUNT = 4;
+    public static final int NAV_ITEM_COUNT = 6;
 
     UserBaseInformation UBI;
     POJOClassInfo pojoClassInfo;
@@ -67,7 +72,9 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
     @BindView(R.id.nav_view) NavigationView navigationView;
 //    @BindView(R.id.swipeToRefreshMain) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.loadingView) ProgressBar progressBar;
     @BindView(R.id.fabSpeedDial) FabSpeedDial fabSpeedDial;
+    @BindView(R.id.floatingActionButton) FloatingActionButton floatingActionButton;
     @BindView(R.id.contentView) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
@@ -78,7 +85,9 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
     TabFragment tabFragment;
     GroupMainFragment groupMainFragment;
+    GradeFragment gradeFragment;
     TimetableTabFragment timetableTabFragment;
+    SubjectsFragment subjectsFragment;
 
 
     @Override
@@ -88,10 +97,15 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
         ButterKnife.bind(this);
         setRetainInstance(true);
 
+        floatingActionButton.hide();
+
 
         fragmentManager = getSupportFragmentManager();
         timetableTabFragment = new TimetableTabFragment();
         groupMainFragment = new GroupMainFragment();
+        gradeFragment = new GradeFragment();
+        subjectsFragment = new SubjectsFragment();
+
 
 //
 //        Check if user is log in
@@ -113,6 +127,7 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
 
         fabSpeedDial.setMenuListener(this);
+        floatingActionButton.setOnClickListener(this);
 
 
         tabFragment = new TabFragment();
@@ -129,6 +144,8 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
 
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(2).setEnabled(false);
+        navigationView.getMenu().getItem(2).setVisible(false);
 
 
         View header = navigationView.getHeaderView(0);
@@ -208,6 +225,8 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
     @Override
     public void loadData(boolean pullToRefresh) {
+        progressBar.setVisibility(View.VISIBLE);
+
         presenter.getInfoAboutUserOnStart(TOKEN, ACTIVE_USER_CLASS);
 
         Log.d("MVPMain", "loadDate");
@@ -236,6 +255,8 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
     @Override
     public void showContent() {
         super.showContent();
+
+
 
             switch (mainInformationAboutUserAndClass.getWithScreenOnTop()) {
 
@@ -267,7 +288,19 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
                     break;
 
+                case GradeFragment.GRADE_SCREEN:
 
+                    onNavigationItemSelected(navigationView.getMenu().getItem(GradeFragment.GRADE_SCREEN));
+                    navigationView.getMenu().getItem(GradeFragment.GRADE_SCREEN).setChecked(true);
+
+                    break;
+
+                case SubjectsFragment.SUBJECT_SCREEN:
+
+                    onNavigationItemSelected(navigationView.getMenu().getItem(SubjectsFragment.SUBJECT_SCREEN));
+                    navigationView.getMenu().getItem(SubjectsFragment.SUBJECT_SCREEN).setChecked(true);
+
+                    break;
             }
 
             setActionbarName();
@@ -437,6 +470,7 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
 
         if (id == R.id.nav_home) {
+            floatingActionButton.hide();
 
 
             fabSpeedDial.show();
@@ -447,7 +481,7 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
 
             if(tabFragment.isVisible()){
-                tabFragment.setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
+                tabFragment.setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass, getPresenter().getTimetableMainInformation());
             }else {
                 fragmentManager.beginTransaction().replace(R.id.content_main, tabFragment).commit();
             }
@@ -458,18 +492,57 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
         } else if (id == R.id.nav_timetable) {
 
 
+            floatingActionButton.hide();
             fabSpeedDial.hide();
 
+            if(timetableTabFragment.isVisible()){
+                timetableTabFragment.setDate(getPresenter().getTimetableMainInformation().getMessage());
+            }else {
+                fragmentManager.beginTransaction().replace(R.id.content_main, timetableTabFragment).commit();
+            }
 
             presenter.setTopScreen(TimetableTabFragment.TIMETABLE_SCREEN);
 
 
-            fragmentManager.beginTransaction().replace(R.id.content_main, timetableTabFragment).commit();
+
+        }else if(id == R.id.nav_grades_list){
+
+            floatingActionButton.show();
+            fabSpeedDial.hide();
+
+
+            presenter.setTopScreen(GradeFragment.GRADE_SCREEN);
+
+
+            if(gradeFragment.isVisible()){
+//                gradeFragment.setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
+            }else {
+                fragmentManager.beginTransaction().replace(R.id.content_main, gradeFragment).commit();
+            }
+//            groupMainFragment.getPresenter().setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
+
+
+        }else if(id == R.id.nav_subjects_list){
+
+        floatingActionButton.show();
+        fabSpeedDial.hide();
+
+
+        presenter.setTopScreen(SubjectsFragment.SUBJECT_SCREEN);
+
+
+        if(subjectsFragment.isVisible()){
+            subjectsFragment.getPresenter().setSubjectList(presenter.loadSubjectList());
+        }else {
+            fragmentManager.beginTransaction().replace(R.id.content_main, subjectsFragment).commit();
+        }
+//            groupMainFragment.getPresenter().setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
 
 
         }else if(id == R.id.nav_add_remove_membership_class){
 
 
+            floatingActionButton.show();
             fabSpeedDial.hide();
 
             presenter.setTopScreen(GroupMainFragment.GROUP_SCREEN);
@@ -487,6 +560,40 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
             logOut();
 
         }else if (id >= NAV_ITEM_COUNT){
+
+
+            switch (mainInformationAboutUserAndClass.getWithScreenOnTop()) {
+
+                case TabFragment.MAIN_SCREEN:
+
+                    tabFragment.setRefreshing(true);
+
+                    break;
+                case TimetableTabFragment.TIMETABLE_SCREEN:
+
+
+                    timetableTabFragment.setRefreshing(true);
+
+                    break;
+                case GroupMainFragment.GROUP_SCREEN:
+
+                    groupMainFragment.setRefreshing(true);
+
+                    break;
+
+                case GradeFragment.GRADE_SCREEN:
+
+
+
+
+                    break;
+
+                case SubjectsFragment.SUBJECT_SCREEN:
+
+                    subjectsFragment.setRefreshing(true);
+
+                    break;
+            }
 
             ACTIVE_USER_CLASS = UBI.getGroups().get(id - NAV_ITEM_COUNT).getGroupname();
 
@@ -597,6 +704,37 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
         }
 
         return true;
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        switch (presenter.getMainInformationAboutUserAndClass().getWithScreenOnTop()){
+
+            case GradeFragment.GRADE_SCREEN:
+
+
+                AddGrade addGrade = new AddGrade();
+                addGrade.show(getSupportFragmentManager(), "Dodaj ocene");
+
+
+                break;
+            case  SubjectsFragment.SUBJECT_SCREEN:
+
+                AddSubject addSubject = new AddSubject().newInstance("", -1);
+                addSubject.show(getSupportFragmentManager(), "Dodaj przdmiot");
+
+                break;
+
+            case GroupMainFragment.GROUP_SCREEN:
+
+                AddNewClassDialog addNewClassDialog = new AddNewClassDialog();
+                addNewClassDialog.show(getSupportFragmentManager(), "Dodaj klasę");
+
+                break;
+
+        }
+
     }
 
     @Override
@@ -729,36 +867,46 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
     void setActionbarName(){
 
         if(mainInformationAboutUserAndClass!= null) {
-            switch (mainInformationAboutUserAndClass.getWithScreenOnTop()) {
-
-                case TabFragment.MAIN_SCREEN:
 
 
-                    if (getSupportActionBar() != null)
-                        getSupportActionBar().setTitle("school info");
+            if (getSupportActionBar() != null) {
+                switch (mainInformationAboutUserAndClass.getWithScreenOnTop()) {
 
+                    case TabFragment.MAIN_SCREEN:
 
-                    break;
-                case TimetableTabFragment.TIMETABLE_SCREEN:
+                            getSupportActionBar().setTitle("school info");
 
-                    if (getSupportActionBar() != null)
-                        getSupportActionBar().setTitle("Plan lekcji");
+                        break;
 
-                    break;
+                    case TimetableTabFragment.TIMETABLE_SCREEN:
 
-                case GroupMainFragment.GROUP_SCREEN:
+                            getSupportActionBar().setTitle("Plan lekcji");
 
+                        break;
 
-                    if (getSupportActionBar() != null)
-                        getSupportActionBar().setTitle("Lista klas");
+                    case GradeFragment.GRADE_SCREEN:
 
+                            getSupportActionBar().setTitle("Oceny");
 
-                    break;
+                        break;
 
+                    case SubjectsFragment.SUBJECT_SCREEN:
+
+                            getSupportActionBar().setTitle("Przedmioty");
+
+                        break;
+
+                    case GroupMainFragment.GROUP_SCREEN:
+
+                            getSupportActionBar().setTitle("Lista klas");
+
+                        break;
+
+                }
+            } else {
+                    getSupportActionBar().setTitle("school info");
             }
-        }else {
-            if (getSupportActionBar() != null)
-                getSupportActionBar().setTitle("school info");
+
         }
     }
 
@@ -774,6 +922,46 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
         else {
             super.onBackPressed();
         }
+    }
+
+    public void setRefreshing(boolean b) {
+
+            switch (mainInformationAboutUserAndClass.getWithScreenOnTop()) {
+
+                case TabFragment.MAIN_SCREEN:
+
+                    tabFragment.setRefreshing(b);
+
+                    break;
+
+                case TimetableTabFragment.TIMETABLE_SCREEN:
+
+
+                    timetableTabFragment.setRefreshing(b);
+
+
+                    break;
+
+                case GradeFragment.GRADE_SCREEN:
+
+//                    gradeFragment.setRefreshing(b);
+
+                    break;
+
+                case SubjectsFragment.SUBJECT_SCREEN:
+
+                    subjectsFragment.setRefreshing(b);
+
+                    break;
+
+                case GroupMainFragment.GROUP_SCREEN:
+
+                    groupMainFragment.setRefreshing(b);
+
+                    break;
+
+            }
+
     }
 
 

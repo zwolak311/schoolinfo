@@ -1,7 +1,5 @@
 package com.schoolInfo.bartosz.schoolinfo.Home.MainInformation.Detail;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -14,8 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,6 +62,10 @@ public class DetailActivity extends MvpActivity<DetailView, DetailPresenter> imp
                 getIntent().getStringExtra("subject"),
                 getIntent().getStringExtra("date"),
                 getIntent().getStringExtra("content"));
+
+
+        setEditableEnable(true);
+
     }
 
 
@@ -138,46 +138,90 @@ public class DetailActivity extends MvpActivity<DetailView, DetailPresenter> imp
 
 
         class HeaderViewHolder extends RecyclerView.ViewHolder {
-            @BindView(R.id.detailSubject) AutoCompleteTextView subject;
-            @BindView(R.id.detailDate) TextView date;
-            @BindView(R.id.detailContent) AutoCompleteTextView content;
-//            @BindView(R.id.detailAcceptedIcon) ImageView acceptIcon;
-            @BindView(R.id.detailEditButton) ImageView edit;
-            @BindView(R.id.detailSave) ImageView save;
-            @BindView(R.id.detailTypeOfInfo) TextView typeOfInfo;
-            @BindView(R.id.detailArrow) ImageView detailArrow;
+//            @BindView(R.id.detailSubject) AutoCompleteTextView subject;
+//            @BindView(R.id.detailDate) TextView date;
+//            @BindView(R.id.detailContent) AutoCompleteTextView content;
+////            @BindView(R.id.detailAcceptedIcon) ImageView acceptIcon;
+//            @BindView(R.id.detailEditButton) ImageView edit;
+//            @BindView(R.id.detailSave) ImageView save;
+//            @BindView(R.id.detailTypeOfInfo) TextView typeOfInfo;
+//            @BindView(R.id.detailArrow) ImageView detailArrow;
+
+            @BindView(R.id.DetailHomeworkExamSubject) TextView subject;
+            @BindView(R.id.DetailHomeworkExamContent) TextView content;
+            @BindView(R.id.DetailHomeworkExamDate) TextView date;
+            @BindView(R.id.DetailHomeworkExamTypeOfInfo) TextView typeOfInfo;
+
 
             HeaderViewHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this, itemView);
 
-                itemView.clearFocus();
-                String[] subjects = getResources().getStringArray(R.array.subject_array);
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(DetailActivity.this,  android.R.layout.simple_list_item_1, subjects);
-                subject.setAdapter(arrayAdapter);
+//                itemView.clearFocus();
+//                String[] subjects = getResources().getStringArray(R.array.subject_array);
+//                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(DetailActivity.this,  android.R.layout.simple_list_item_1, subjects);
+//                subject.setAdapter(arrayAdapter);
 
             }
 
 
-            @OnClick(R.id.detailEditButton)
-            void edit(){
+//            @OnClick(R.id.DetailImageViewEdit)
+//            void edit(){
+//
+//                if(MainActivity.MANAGE_DATA == 1) {
+//
+//                        setEditableEnable(true);
+//                }else
+//                    Toast.makeText(DetailActivity.this, "Nie posiadasz wystarczających uprawnień.", Toast.LENGTH_SHORT).show();
+//            }
 
-                if(MainActivity.MANAGE_DATA == 1) {
-                    if (witchSave)
-                        setEditableEnable(false);
-                    else
-                        setEditableEnable(true);
-                }else
-                    Toast.makeText(DetailActivity.this, "Nie posiadasz wystarczających uprawnień.", Toast.LENGTH_SHORT).show();
+
+            @OnClick(R.id.DetailImageViewSave)
+            void save(){
+                subjectString = this.subject.getText().toString();
+                dateString = this.date.getText().toString();
+                contentString = this.content.getText().toString();
+
+
+                swipeRefreshLayout.setRefreshing(true);
+                presenter.onSaveButtonClick(typeOfInfoToSend,
+                        subject.getText().toString(),
+                        date.getText().toString(),
+                        content.getText().toString());
+            }
+
+            @OnClick(R.id.DetailImageViewCancle)
+            void cancle(){
+
+//                if (witchSave)
+//                    setEditableEnable(false);
+//                else
+
+                onResume();
+
+
             }
 
 
-            @OnClick(R.id.detailArrow)
+
+            @OnClick(R.id.DetailHomeworkExamDate)
+            void setDate(){
+
+                subjectStringSecond = subject.getText().toString();
+                contentStringSecond = content.getText().toString();
+
+                DialogFragment datePicker = new DatePickerFragment();
+                datePicker.show(getSupportFragmentManager(), "datePicker");
+            }
+
+
+
+            @OnClick(R.id.DetailHomeworkExamTypeOfInfo)
             void arrow(){
 
                 if(witchSave) {
 
-                    PopupMenu popup = new PopupMenu(DetailActivity.this, detailArrow);
+                    PopupMenu popup = new PopupMenu(DetailActivity.this, typeOfInfo);
                     popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
 
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -221,29 +265,9 @@ public class DetailActivity extends MvpActivity<DetailView, DetailPresenter> imp
             }
 
 
-            @OnClick(R.id.detailSave)
-            void save(){
-                subjectString = this.subject.getText().toString();
-                dateString = this.date.getText().toString();
-                contentString = this.content.getText().toString();
 
+//
 
-                swipeRefreshLayout.setRefreshing(true);
-                presenter.onSaveButtonClick(typeOfInfoToSend,
-                        subject.getText().toString(),
-                        date.getText().toString(),
-                        content.getText().toString());
-            }
-
-            @OnClick(R.id.detailDate)
-            void setDate(){
-
-                subjectStringSecond = subject.getText().toString();
-                contentStringSecond = content.getText().toString();
-
-                DialogFragment datePicker = new DatePickerFragment();
-                datePicker.show(getSupportFragmentManager(), "datePicker");
-            }
         }
 
         class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -263,8 +287,9 @@ public class DetailActivity extends MvpActivity<DetailView, DetailPresenter> imp
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if(viewType == TYPE_HEADER){
-                View view = LayoutInflater.from(DetailActivity.this).inflate(R.layout.homework_exam_detail_item_0_position, parent, false);
-                view.clearFocus();
+//                View view = LayoutInflater.from(DetailActivity.this).inflate(R.layout.homework_exam_detail_item_0_position, parent, false);
+                View view = LayoutInflater.from(DetailActivity.this).inflate(R.layout.homework_exam_detail_item_0_second, parent, false);
+//                view.clearFocus();
                 return new HeaderViewHolder(view);
             }else if (viewType == TYPE_ITEM){
                 View view = LayoutInflater.from(DetailActivity.this).inflate(R.layout.comment, parent, false);
@@ -300,17 +325,18 @@ public class DetailActivity extends MvpActivity<DetailView, DetailPresenter> imp
                 headerViewHolder.typeOfInfo.setText(typeOfInfoString);
 
                 if(witchSave) {
-                    headerViewHolder.edit.setImageResource(R.drawable.detail_cancle);
-                    headerViewHolder.save.setVisibility(View.VISIBLE);
-                    headerViewHolder.detailArrow.setImageResource(R.drawable.arrow_drop_down);
+//                    headerViewHolder.edit.setImageResource(R.drawable.detail_cancle);
+//                    headerViewHolder.save.setVisibility(View.VISIBLE);
+//                    headerViewHolder.detailArrow.setImageResource(R.drawable.arrow_drop_down);
                 }else {
-                    headerViewHolder.edit.setImageResource(R.drawable.detail_edit_info);
-                    headerViewHolder.save.setVisibility(View.GONE);
-                    headerViewHolder.detailArrow.setImageResource(R.drawable.detail_arrow_right);
+//                    headerViewHolder.edit.setImageResource(R.drawable.detail_edit_info);
+//                    headerViewHolder.save.setVisibility(View.GONE);
+//                    headerViewHolder.detailArrow.setImageResource(R.drawable.detail_arrow_right);
                 }
                 headerViewHolder.subject.setEnabled(witchSave);
                 headerViewHolder.date.setEnabled(witchSave);
                 headerViewHolder.content.setEnabled(witchSave);
+                headerViewHolder.typeOfInfo.setEnabled(witchSave);
 
 
             } else if(holder instanceof ItemViewHolder){
@@ -336,7 +362,7 @@ public class DetailActivity extends MvpActivity<DetailView, DetailPresenter> imp
 
         @Override
         public int getItemCount() {
-            return 10;
+            return 1;
         }
 
 

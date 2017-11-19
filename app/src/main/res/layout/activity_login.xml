@@ -13,7 +13,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorGray">
 
 
         <Button
@@ -23,9 +23,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorMostDark"
             android:text="ZALOGUJ"
-            android:textColor="@color/colorDirtyWhite"
+            android:textColor="@color/colorWhite"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -38,8 +38,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Email"
-            android:textColor="@color/colorDirtyWhite"
-            android:textColorHint="@color/colorDirtyWhite"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
             android:inputType="textEmailAddress"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="16dp"
@@ -56,8 +56,8 @@
             android:ems="10"
             android:hint="Hasło"
             android:inputType="textPassword"
-            android:textColor="@color/colorDirtyWhite"
-            android:textColorHint="@color/colorDirtyWhite"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
             android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@+id/email"
             android:layout_marginLeft="16dp"

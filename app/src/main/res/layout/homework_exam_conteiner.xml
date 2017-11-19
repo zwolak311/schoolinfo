@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorMostDark"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -12,8 +13,10 @@
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"
+            android:layout_marginBottom="40dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:elevation="4dp"
             android:theme="@style/AppTheme.AppBarOverlay">
 
 
@@ -21,9 +24,21 @@
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabIndicatorColor="@color/colorDirtyWhite"
+                app:elevation="4dp"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:tabTextAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
+
+            <!--<FrameLayout android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+
+                <!--&lt;!&ndash; **** Place Your Content Here **** &ndash;&gt;-->
+
+                <!--<View android:layout_width="match_parent"-->
+                    <!--android:layout_height="5dp"-->
+                    <!--android:background="@drawable/toolbar_dropshadow"/>-->
+
+            <!--</FrameLayout>-->
 
         </android.support.design.widget.AppBarLayout>
 

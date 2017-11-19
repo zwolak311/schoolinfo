@@ -13,7 +13,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorGray">
 
         <ImageView
             android:id="@+id/imageView"
@@ -67,9 +67,9 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="0dp"
             android:layout_marginLeft="0dp"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorMostDark"
             android:text="ZAREJESTRUJ SIĘ"
-            android:textColor="@color/colorDirtyWhite"
+            android:textColor="@color/colorWhite"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             app:layout_constraintLeft_toLeftOf="@+id/registerWithGoogle"

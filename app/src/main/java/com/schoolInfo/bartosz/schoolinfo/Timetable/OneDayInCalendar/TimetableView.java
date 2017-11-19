@@ -12,4 +12,7 @@ public interface TimetableView extends MvpView {
     void setDate(List<String> subjects, List<String> classNumb, List<String> listTime);
 
     void getDate();
+
+    void setTimetableEditDate(int subject, int dayId , int sort, String classNum);
+
 }

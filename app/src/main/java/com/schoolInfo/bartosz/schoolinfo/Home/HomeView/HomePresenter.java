@@ -1,8 +1,10 @@
 package com.schoolInfo.bartosz.schoolinfo.Home.HomeView;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.schoolInfo.bartosz.schoolinfo.MainActivity.MainActivity;
 import com.schoolInfo.bartosz.schoolinfo.Rest.MainInformationAboutUserAndClass;
 import com.schoolInfo.bartosz.schoolinfo.Rest.POJOClassInfo;
+import com.schoolInfo.bartosz.schoolinfo.Rest.TimetableMainInformation;
 import com.schoolInfo.bartosz.schoolinfo.Rest.UserBaseInformation;
 
 import java.text.DateFormat;
@@ -17,6 +19,8 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
 //    private POJOClassInfo pojoClassInfo;
 //    private UserBaseInformation UBI;
     private MainInformationAboutUserAndClass mainInformationAboutUserAndClass;
+    private TimetableMainInformation.Message group;
+    private TimetableMainInformation tim;
 
 
     HomePresenter() {
@@ -30,16 +34,21 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
 
 
 
-    public void setDate(MainInformationAboutUserAndClass mainInformationAboutUserAndClass){
+    public void setDate(MainInformationAboutUserAndClass mainInformationAboutUserAndClass, TimetableMainInformation timetableMainInformation){
 //        if(mainInformationAboutUserAndClass != null) {
 
         this.mainInformationAboutUserAndClass = mainInformationAboutUserAndClass;
 
-//            this.UBI = mainInformationAboutUserAndClass.getUBI();
-//            this.pojoClassInfo = mainInformationAboutUserAndClass.getPojoClassInfo();
-//        }else {
 
-//        }
+        for (TimetableMainInformation.Message groupName: timetableMainInformation.getMessage()) {
+            if(groupName.getGroupname().equals(MainActivity.ACTIVE_USER_CLASS))
+                this.group = groupName;
+        }
+
+
+//        this.tim = timetableMainInformation;
+
+
         setTimetable();
 
     }
@@ -88,6 +97,21 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
         }
     }
 
+    private void searchDataForCurrentDay(int daysToAdd, String dayString, String dayName){
+
+        ArrayList<String> subjects = new ArrayList<>();
+
+        for (TimetableMainInformation.Message.Days day: group.getDays()) {
+            if(day.getName().equals(dayString))
+                for (TimetableMainInformation.Message.Days.Subject subject: day.getSubjects())
+                    subjects.add(subject.getName());
+        }
+
+        setCorrectDateForView(daysToAdd, dayName, subjects, null);
+
+
+    }
+
 
     private void setTimetable(){
 
@@ -106,157 +130,66 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
             listDataHeader.add("Czwartek");
             listDataHeader.add("Piątek");
 
-            // Adding child data
-            List<String> poniedzialek = new ArrayList<>();
-            poniedzialek.add("Polski");
-            poniedzialek.add("Polski");
-            poniedzialek.add("Religia");
-            poniedzialek.add("Angielski");
-            poniedzialek.add("Angielski");
-            poniedzialek.add("Proj. sieci");
-            poniedzialek.add("Matematyka");
 
-            List<String> poniedziałekClass = new ArrayList<>();
-            poniedziałekClass.add("9");
-            poniedziałekClass.add("9");
-            poniedziałekClass.add("7");
-            poniedziałekClass.add("103");
-            poniedziałekClass.add("103");
-            poniedziałekClass.add("208");
-            poniedziałekClass.add("8");
-
-
-            List<String> wtorek = new ArrayList<>();
-            wtorek.add("Witryny");
-            wtorek.add("Witryny");
-            wtorek.add("Admin.");
-            wtorek.add("Admin.");
-            wtorek.add("Matematyka");
-            wtorek.add("Angielski");
-            wtorek.add("Polski");
-
-
-            List<String> wtorekClass = new ArrayList<>();
-            wtorekClass.add("108");
-            wtorekClass.add("108");
-            wtorekClass.add("208");
-            wtorekClass.add("208");
-            wtorekClass.add("8");
-            wtorekClass.add("103");
-            wtorekClass.add("9");
-
-
-            List<String> sroda = new ArrayList<>();
-            sroda.add("Historia i społeczeństwo");
-            sroda.add("Matematyka");
-            sroda.add("Progr.");
-            sroda.add("Progr.");
-            sroda.add("WF");
-            sroda.add("Systemy");
-            sroda.add("Progr.");
-
-
-            List<String> srodaClass = new ArrayList<>();
-            srodaClass.add("102");
-            srodaClass.add("8");
-            srodaClass.add("108");
-            srodaClass.add("108");
-            srodaClass.add("");
-            srodaClass.add("208");
-            srodaClass.add("108");
-
-
-            List<String> czwartek = new ArrayList<>();
-            czwartek.add("Historia i społeczeństwo");
-            czwartek.add("Matematyka");
-            czwartek.add("Matematyka");
-            czwartek.add("Progr.");
-            czwartek.add("Zajencia wych");
-            czwartek.add("Angielski");
-            czwartek.add("Angielski");
-
-
-            List<String> czwartekClass = new ArrayList<>();
-            czwartekClass.add("107");
-            czwartekClass.add("8");
-            czwartekClass.add("8");
-            czwartekClass.add("108");
-            czwartekClass.add("105");
-            czwartekClass.add("103");
-            czwartekClass.add("103");
-
-            List<String> piatek = new ArrayList<>();
-            piatek.add("Sieci");
-            piatek.add("Projektowanie");
-            piatek.add("Niemiecki");
-            piatek.add("Religia");
-            piatek.add("Sieci");
-            piatek.add("Dział");
-            piatek.add("WF");
-            piatek.add("WF");
-
-
-            List<String> piatekClass = new ArrayList<>();
-            piatekClass.add("208");
-            piatekClass.add("208");
-            piatekClass.add("105");
-            piatekClass.add("17");
-            piatekClass.add("208");
-            piatekClass.add("204");
-            piatekClass.add("");
-            piatekClass.add("");
 
             switch (cal.get(Calendar.DAY_OF_WEEK)) {
 
                 case Calendar.MONDAY:
 
                     if(cal.get(Calendar.HOUR_OF_DAY) > 14)
-                        setCorrectDateForView(1, listDataHeader.get(1), wtorek, wtorekClass);
+                        searchDataForCurrentDay(1, "tuesday", listDataHeader.get(1));
                     else
-                        setCorrectDateForView(0, listDataHeader.get(0), poniedzialek, poniedziałekClass);
+                        searchDataForCurrentDay(0, "monday", listDataHeader.get(0));
 
                     break;
                 case Calendar.TUESDAY:
 
                     if(cal.get(Calendar.HOUR_OF_DAY) > 14)
-                        setCorrectDateForView(1, listDataHeader.get(2), sroda, srodaClass);
+                        searchDataForCurrentDay(1, "wednesday", listDataHeader.get(2));
+
                     else
-                        setCorrectDateForView(0, listDataHeader.get(1), wtorek, wtorekClass);
+                        searchDataForCurrentDay(0, "tuesday", listDataHeader.get(1));
 
                     break;
                 case Calendar.WEDNESDAY:
 
                     if(cal.get(Calendar.HOUR_OF_DAY) > 14)
-                        setCorrectDateForView(1, listDataHeader.get(3), czwartek, czwartekClass);
+                        searchDataForCurrentDay(1, "thursday", listDataHeader.get(3));
                     else
-                        setCorrectDateForView(0, listDataHeader.get(2), sroda, srodaClass);
+                        searchDataForCurrentDay(0, "wednesday", listDataHeader.get(2));
+
 
                     break;
                 case Calendar.THURSDAY:
 
 
                     if(cal.get(Calendar.HOUR_OF_DAY) > 14)
-                        setCorrectDateForView(1, listDataHeader.get(4), piatek, piatekClass);
+                        searchDataForCurrentDay(1, "friday", listDataHeader.get(4));
+
                     else
-                        setCorrectDateForView(0, listDataHeader.get(3), czwartek, czwartekClass);
+                        searchDataForCurrentDay(0, "thursday", listDataHeader.get(3));
+
 
                     break;
                 case Calendar.FRIDAY:
 
                     if(cal.get(Calendar.HOUR_OF_DAY) > 14)
-                        setCorrectDateForView(3, listDataHeader.get(0), poniedzialek, poniedziałekClass);
+                        searchDataForCurrentDay(1, "monday", listDataHeader.get(1));
+
                     else
-                        setCorrectDateForView(0, listDataHeader.get(4), piatek, piatekClass);
+                        searchDataForCurrentDay(0, "friday", listDataHeader.get(4));
+
 
                     break;
                 case Calendar.SATURDAY:
 
-                    setCorrectDateForView(2, listDataHeader.get(0), poniedzialek, poniedziałekClass);
+                    searchDataForCurrentDay(2, "monday", listDataHeader.get(0));
+
 
                     break;
                 case Calendar.SUNDAY:
+                    searchDataForCurrentDay(1, "monday", listDataHeader.get(0));
 
-                    setCorrectDateForView(1, listDataHeader.get(0), poniedzialek, poniedziałekClass);
 
                     break;
             }

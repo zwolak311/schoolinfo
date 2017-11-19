@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
+import com.schoolInfo.bartosz.schoolinfo.Home.MainInformation.AddedInfo.AddedDialog;
 import com.schoolInfo.bartosz.schoolinfo.Home.MainInformation.Detail.DetailActivity;
 import com.schoolInfo.bartosz.schoolinfo.Home.TabFragment;
 import com.schoolInfo.bartosz.schoolinfo.MainActivity.MainActivity;
@@ -186,7 +186,7 @@ public class MainInformationFragment extends MvpFragment<MainInformationView, Ma
 
 
         recyclerView.setVisibility(View.GONE);
-        faceImage.setImageResource(R.mipmap.face_second_try);
+        faceImage.setImageResource(R.drawable.face_smile);
         faceImage.setVisibility(View.VISIBLE);
 
         underIconText.setVisibility(View.VISIBLE);
@@ -277,16 +277,21 @@ public class MainInformationFragment extends MvpFragment<MainInformationView, Ma
     public void showDetailInfo(int id, String typeOfinfo, String subject, String date, String content) {
         isDetailCreated = true;
 
-        Intent intent = new Intent(getActivity(), DetailActivity.class);
-        intent.putExtra("id", id);
-        intent.putExtra("typeOfInfo", typeOfinfo);
-        intent.putExtra("subject", subject);
-        intent.putExtra("date", date);
-        intent.putExtra("content", content);
-        intent.putExtra("token", MainActivity.TOKEN);
+//        Intent intent = new Intent(getActivity(), DetailActivity.class);
+//        intent.putExtra("id", id);
+//        intent.putExtra("typeOfInfo", typeOfinfo);
+//        intent.putExtra("subject", subject);
+//        intent.putExtra("date", date);
+//        intent.putExtra("content", content);
+//        intent.putExtra("token", MainActivity.TOKEN);
 
+        String s = "" + id;
 
-        startActivity(intent);
+        AddedDialog addedDialog = new AddedDialog().newInstance(subject, content, date, typeOfinfo, s);
+        addedDialog.show(getChildFragmentManager(), "editInfo");
+
+//        startActivity(intent);
+
 
     }
 
@@ -463,6 +468,35 @@ public class MainInformationFragment extends MvpFragment<MainInformationView, Ma
 //                    break;
 //            }
 
+
+
+            switch (informationList.get(position).getType()){
+
+                case "exam":
+
+                    holder.subject.setBackgroundResource(R.color.colorExam);
+
+                    break;
+
+                case "news":
+
+                    holder.subject.setBackgroundResource(R.color.colorNews);
+
+
+                    break;
+
+                case "homework":
+
+                    holder.subject.setBackgroundResource(R.color.colorHomework);
+
+
+                    break;
+
+
+            }
+
+
+//            Toast.makeText(detailActivity, "" + informationList.get(position).getType() + position, Toast.LENGTH_SHORT).show();
 
             holder.subject.setText(informationList.get(fixedPosition).getSubject());
             holder.content.setText(informationList.get(fixedPosition).getContent());

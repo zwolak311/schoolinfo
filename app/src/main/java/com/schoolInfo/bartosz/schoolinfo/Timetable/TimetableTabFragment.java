@@ -11,16 +11,33 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.schoolInfo.bartosz.schoolinfo.MainActivity.MainActivity;
 import com.schoolInfo.bartosz.schoolinfo.R;
+import com.schoolInfo.bartosz.schoolinfo.Rest.RestInterface;
+import com.schoolInfo.bartosz.schoolinfo.Rest.SubjectList;
+import com.schoolInfo.bartosz.schoolinfo.Rest.TimetableMainInformation;
+import com.schoolInfo.bartosz.schoolinfo.Rest.Token;
+import com.schoolInfo.bartosz.schoolinfo.Rest.TokenAndGroupName;
 import com.schoolInfo.bartosz.schoolinfo.Timetable.OneDayInCalendar.TimetableFragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class TimetableTabFragment extends Fragment {
@@ -28,10 +45,7 @@ public class TimetableTabFragment extends Fragment {
     TimetableFragment timetableFragmentMon, timetableFragmentTue, timetableFragmentWed, timetableFragmentThu, timetableFragmentFri;
 
     public boolean isCreateFirstTime = true;
-    List<String> poniedzialek;
-
     public static final int TIMETABLE_SCREEN = 1;
-
 
 
     public static final int MON = 0;
@@ -42,19 +56,16 @@ public class TimetableTabFragment extends Fragment {
 
     @BindView(R.id.viewPager) ViewPager viewPager;
     @BindView(R.id.tabLayout) TabLayout tabLayout;
+    TimetableMainInformation.Message currentGroup;
+    TimetableMainInformation.Message.Days currentDay;
+    int day;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-//
-//
-////        try{
-////            MainActivity mainActivity = (MainActivity) getActivity();
-////            mainActivity.refreshUBI();
-////        }catch (Exception ignored){}
-//
+
     }
 
     @Nullable
@@ -63,6 +74,7 @@ public class TimetableTabFragment extends Fragment {
         View view = inflater.inflate(R.layout.homework_exam_conteiner, container, false);
         ButterKnife.bind(this, view);
 
+        isCreateFirstTime = true;
 
         timetableFragmentMon = TimetableFragment.setDay(MON);
         timetableFragmentTue = TimetableFragment.setDay(TUE);
@@ -71,17 +83,15 @@ public class TimetableTabFragment extends Fragment {
         timetableFragmentFri = TimetableFragment.setDay(FRI);
 
 
-        isCreateFirstTime = true;
 
         setupViewPager(viewPager);
-
-
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
+
 
         switch (cal.get(Calendar.DAY_OF_WEEK)) {
 
@@ -145,8 +155,6 @@ public class TimetableTabFragment extends Fragment {
 
                 break;
         }
-
-
         return view;
     }
 
@@ -154,162 +162,122 @@ public class TimetableTabFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-
-    }
-
-
-    public void setTimetable(int day){
-
-
-        List<String> listTime = new ArrayList<>();
-        listTime.add("8:00-8:45");
-        listTime.add("8:50-9:35");
-        listTime.add("9:45-10:30");
-        listTime.add("10:35-11:20");
-        listTime.add("11:35-12:20");
-        listTime.add("12:25-13:10");
-        listTime.add("13:15-14:00");
-        listTime.add("14:05-14:50");
-        listTime.add("14:55-15:40");
-
-
-        switch (day) {
-
-            case MON:
-            // Adding child data
-            poniedzialek = new ArrayList<>();
-            poniedzialek.add("Polski");
-            poniedzialek.add("Polski");
-            poniedzialek.add("Religia");
-            poniedzialek.add("Angielski");
-            poniedzialek.add("Angielski");
-            poniedzialek.add("Proj. sieci");
-            poniedzialek.add("Matematyka");
-
-            List<String> poniedziałekClass = new ArrayList<>();
-            poniedziałekClass.add("9");
-            poniedziałekClass.add("9");
-            poniedziałekClass.add("7");
-            poniedziałekClass.add("103");
-            poniedziałekClass.add("103");
-            poniedziałekClass.add("208");
-            poniedziałekClass.add("8");
-
-
-
-            timetableFragmentMon.getPresenter().setDate(poniedzialek, poniedziałekClass, listTime);
-
-                break;
-
-            case TUE:
-            List<String> wtorek = new ArrayList<>();
-            wtorek.add("Witryny");
-            wtorek.add("Witryny");
-            wtorek.add("Admin.");
-            wtorek.add("Admin.");
-            wtorek.add("Matematyka");
-            wtorek.add("Angielski");
-            wtorek.add("Polski");
-
-
-            List<String> wtorekClass = new ArrayList<>();
-            wtorekClass.add("108");
-            wtorekClass.add("108");
-            wtorekClass.add("208");
-            wtorekClass.add("208");
-            wtorekClass.add("8");
-            wtorekClass.add("103");
-            wtorekClass.add("9");
-
-            timetableFragmentTue.getPresenter().setDate(wtorek, wtorekClass, listTime);
-
-                break;
-
-            case WAD:
-            List<String> sroda = new ArrayList<>();
-            sroda.add("Historia i społeczeństwo");
-            sroda.add("Matematyka");
-            sroda.add("Progr.");
-            sroda.add("Progr.");
-            sroda.add("WF");
-            sroda.add("Systemy");
-            sroda.add("Progr.");
-
-
-            List<String> srodaClass = new ArrayList<>();
-            srodaClass.add("102");
-            srodaClass.add("8");
-            srodaClass.add("108");
-            srodaClass.add("108");
-            srodaClass.add("");
-            srodaClass.add("208");
-            srodaClass.add("108");
-
-
-            timetableFragmentWed.getPresenter().setDate(sroda, srodaClass, listTime);
-
-                break;
-
-            case THU:
-
-            List<String> czwartek = new ArrayList<>();
-            czwartek.add("Historia i społeczeństwo");
-            czwartek.add("Matematyka");
-            czwartek.add("Matematyka");
-            czwartek.add("Progr.");
-            czwartek.add("Zajencia wych");
-            czwartek.add("Angielski");
-            czwartek.add("Angielski");
-
-
-            List<String> czwartekClass = new ArrayList<>();
-            czwartekClass.add("107");
-            czwartekClass.add("8");
-            czwartekClass.add("8");
-            czwartekClass.add("108");
-            czwartekClass.add("105");
-            czwartekClass.add("103");
-            czwartekClass.add("103");
-
-            timetableFragmentThu.getPresenter().setDate(czwartek, czwartekClass, listTime);
-
-                break;
-
-            case FRI:
-
-            List<String> piatek = new ArrayList<>();
-            piatek.add("Sieci");
-            piatek.add("Projektowanie");
-            piatek.add("Niemiecki");
-            piatek.add("Religia");
-            piatek.add("Sieci");
-            piatek.add("Dział");
-            piatek.add("WF");
-            piatek.add("WF");
-
-
-            List<String> piatekClass = new ArrayList<>();
-            piatekClass.add("208");
-            piatekClass.add("208");
-            piatekClass.add("105");
-            piatekClass.add("17");
-            piatekClass.add("208");
-            piatekClass.add("204");
-            piatekClass.add("");
-            piatekClass.add("");
-
-                timetableFragmentFri.getPresenter().setDate(piatek, piatekClass, listTime);
-
-                break;
-
+        MainActivity mainActivity = (MainActivity) getActivity();
+        for (TimetableMainInformation.Message messageLoop : mainActivity.getPresenter().getTimetableMainInformation().getMessage()) {
+            if(messageLoop.getGroupname().equals(MainActivity.ACTIVE_USER_CLASS))
+                currentGroup = messageLoop;
         }
 
 
 
 
+    }
+
+    public void setDate(ArrayList<TimetableMainInformation.Message> message){
+
+        for (TimetableMainInformation.Message messageLoop : message) {
+            if(messageLoop.getGroupname().equals(MainActivity.ACTIVE_USER_CLASS))
+                this.currentGroup = messageLoop;
+        }
 
 
-//        }
+        if(timetableFragmentMon.isVisible())
+            setTimetable(0);
+
+
+        if(timetableFragmentTue.isVisible())
+            setTimetable(1);
+
+
+        if(timetableFragmentWed.isVisible())
+            setTimetable(2);
+
+
+        if(timetableFragmentThu.isVisible())
+            setTimetable(3);
+
+
+        if(timetableFragmentFri.isVisible())
+            setTimetable(4);
+
+    }
+
+
+    public void setTimetable(int today){
+        this.day = today;
+
+        switch (today) {
+
+
+            case MON:
+
+
+
+                for (TimetableMainInformation.Message.Days day: currentGroup.getDays()) {
+                    if(day.getName().equals("monday")) {
+                        currentDay = day;
+                    }
+                }
+
+
+                timetableFragmentMon.getPresenter().setDate(currentDay);
+
+                break;
+
+            case TUE:
+
+
+                for (TimetableMainInformation.Message.Days day: currentGroup.getDays()) {
+                    if(day.getName().equals("tuesday"))
+                        currentDay = day;
+                }
+
+
+                timetableFragmentTue.getPresenter().setDate(currentDay);
+
+                break;
+
+            case WAD:
+
+
+                for (TimetableMainInformation.Message.Days day: currentGroup.getDays()) {
+                    if(day.getName().equals("wednesday"))
+                        currentDay = day;
+                }
+
+
+                timetableFragmentWed.getPresenter().setDate(currentDay);
+
+                break;
+
+            case THU:
+
+
+
+                for (TimetableMainInformation.Message.Days day: currentGroup.getDays()) {
+                    if(day.getName().equals("thursday"))
+                        currentDay = day;
+                }
+
+
+                timetableFragmentThu.getPresenter().setDate(currentDay);
+
+                break;
+
+            case FRI:
+
+
+                for (TimetableMainInformation.Message.Days day: currentGroup.getDays()) {
+                    if(day.getName().equals("friday"))
+                        currentDay= day;
+                }
+
+
+                timetableFragmentFri.getPresenter().setDate(currentDay);
+
+                break;
+
+        }
 
 
     }
@@ -326,6 +294,29 @@ public class TimetableTabFragment extends Fragment {
         adapter.addFragment(timetableFragmentFri, "Piątek");
 
         viewPager.setAdapter(adapter);
+
+
+    }
+
+    public void setRefreshing(boolean b) {
+
+        if(timetableFragmentMon.isVisible())
+            timetableFragmentMon.setRefreshing(b);
+
+
+        if(timetableFragmentTue.isVisible())
+            timetableFragmentMon.setRefreshing(b);
+
+
+        if(timetableFragmentWed.isVisible())
+            timetableFragmentMon.setRefreshing(b);
+
+
+        if(timetableFragmentThu.isVisible())
+            timetableFragmentMon.setRefreshing(b);
+
+        if(timetableFragmentFri.isVisible())
+            timetableFragmentMon.setRefreshing(b);
 
 
     }

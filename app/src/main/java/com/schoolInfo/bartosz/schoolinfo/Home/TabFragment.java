@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.schoolInfo.bartosz.schoolinfo.Home.HomeView.HomeFragment;
 import com.schoolInfo.bartosz.schoolinfo.Home.MembersList.MembersList;
@@ -19,6 +20,7 @@ import com.schoolInfo.bartosz.schoolinfo.MainActivity.MainActivity;
 import com.schoolInfo.bartosz.schoolinfo.R;
 import com.schoolInfo.bartosz.schoolinfo.Rest.MainInformationAboutUserAndClass;
 import com.schoolInfo.bartosz.schoolinfo.Rest.POJOClassInfo;
+import com.schoolInfo.bartosz.schoolinfo.Rest.TimetableMainInformation;
 import com.schoolInfo.bartosz.schoolinfo.Rest.UserBaseInformation;
 
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class TabFragment extends Fragment {
     POJOClassInfo pojoClassInfo;
     UserBaseInformation UBI;
     MainInformationAboutUserAndClass mainInformationAboutUserAndClass;
+    TimetableMainInformation timetableMainInformation;
 
 
 
@@ -94,23 +97,24 @@ public class TabFragment extends Fragment {
         super.onResume();
 
         MainActivity mainActivity = (MainActivity) getActivity();
-        setMainInformationAboutUserAndClass(mainActivity.getPresenter().getMainInformationAboutUserAndClass());
+        setMainInformationAboutUserAndClass(mainActivity.getPresenter().getMainInformationAboutUserAndClass(), mainActivity.getPresenter().getTimetableMainInformation());
     }
 
 
 
 
 
-    public void refreshPojoClass(MainInformationAboutUserAndClass mainInformationAboutUserAndClass) {
+    public void refreshPojoClass(MainInformationAboutUserAndClass mainInformationAboutUserAndClass, TimetableMainInformation timetableMainInformation) {
 
         if(homeFragment != null) {
+
 
 //            this.pojoClassInfo = mainInformationAboutUserAndClass.getPojoClassInfo();
 //            this.UBI = mainInformationAboutUserAndClass.getUBI();
 
 //            if (pojoClassInfo != null && UBI != null) {
                 if (homeFragment.isCreated())
-                    homeFragment.getPresenter().setDate(mainInformationAboutUserAndClass);
+                    homeFragment.getPresenter().setDate(mainInformationAboutUserAndClass, timetableMainInformation);
 
                 if (informationFragment.isCreate())
                     informationFragment.getPresenter().setRecycleView(mainInformationAboutUserAndClass);
@@ -136,10 +140,16 @@ public class TabFragment extends Fragment {
         return mainInformationAboutUserAndClass;
     }
 
-    public void setMainInformationAboutUserAndClass(MainInformationAboutUserAndClass mainInformationAboutUserAndClass) {
-        this.mainInformationAboutUserAndClass = mainInformationAboutUserAndClass;
-        refreshPojoClass(mainInformationAboutUserAndClass);
+    public TimetableMainInformation getTimetableMainInformation() {
+        return timetableMainInformation;
     }
+
+    public void setMainInformationAboutUserAndClass(MainInformationAboutUserAndClass mainInformationAboutUserAndClass, TimetableMainInformation timetableMainInformation) {
+        this.mainInformationAboutUserAndClass = mainInformationAboutUserAndClass;
+        this.timetableMainInformation = timetableMainInformation;
+        refreshPojoClass(mainInformationAboutUserAndClass, timetableMainInformation);
+    }
+
 
     private void setupViewPager(ViewPager viewPager) {
 
@@ -153,7 +163,27 @@ public class TabFragment extends Fragment {
         viewPager.setAdapter(adapter);
     }
 
+    public void setRefreshing(boolean refreshing) {
 
+
+        if(homeFragment != null) {
+
+//            this.pojoClassInfo = mainInformationAboutUserAndClass.getPojoClassInfo();
+//            this.UBI = mainInformationAboutUserAndClass.getUBI();
+
+//            if (pojoClassInfo != null && UBI != null) {
+            if (homeFragment.isVisible())
+                homeFragment.setRefreshing(refreshing);
+
+            if (informationFragment.isVisible())
+                informationFragment.setRefreshing(refreshing);;
+
+            if (membersList.isVisible())
+                membersList.setRefreshing(refreshing);
+//            }
+        }
+
+    }
 
 
     private static class Adapter extends FragmentPagerAdapter {

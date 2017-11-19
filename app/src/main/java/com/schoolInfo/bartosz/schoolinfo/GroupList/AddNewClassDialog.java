@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
 
+import com.schoolInfo.bartosz.schoolinfo.MainActivity.MainActivity;
 import com.schoolInfo.bartosz.schoolinfo.R;
 
 import butterknife.BindView;
@@ -17,6 +18,7 @@ import butterknife.ButterKnife;
 
 public class AddNewClassDialog extends DialogFragment {
     @BindView(R.id.group_name_to_create) EditText groupName;
+    @BindView(R.id.group_tag_to_create) EditText groupTag;
 
     @NonNull
     @Override
@@ -31,6 +33,11 @@ public class AddNewClassDialog extends DialogFragment {
                 .setPositiveButton("Stwórz", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        MainActivity mainActivity = (MainActivity) getActivity();
+                        mainActivity.setRefreshing(true);
+                        mainActivity.getPresenter().sendNewGroup(groupName.getText().toString(), groupTag.getText().toString());
+
 
                     }
                 })

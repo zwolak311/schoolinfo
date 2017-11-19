@@ -16,6 +16,16 @@
             android:title="Plan lekcji" />
 
         <item
+            android:id="@+id/nav_grades_list"
+            android:icon="@drawable/grades_icon"
+            android:title="Oceny" />
+
+        <item
+            android:id="@+id/nav_subjects_list"
+            android:icon="@drawable/subject_icon"
+            android:title="Przedmioty" />
+
+        <item
             android:id="@+id/nav_add_remove_membership_class"
             android:icon="@drawable/settings_icon"
             android:title="Lista klas" />

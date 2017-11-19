@@ -1,17 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<color name="colorPrimary">#01579B</color>-->
-    <color name="colorPrimary">#0A6A6E</color>
-    <color name="colorPrimaryLight">#89B1D0</color>
-    <color name="colorPrimaryDark">#00383C</color>
-    <color name="colorAccent">#004c50</color>
-    <color name="colorWhite">#FFFFFF</color>
-    <color name="colorDirtyWhite">#FBFBFB</color>
-    <color name="colorMediumGray">#BDC4C9</color>
-    <color name="colorLightGray">#E0E0E0</color>
-    <color name="colorGray">#7b8994</color>
-    <color name="colorBlack">#000000</color>
-    <color name="colorBlue">#01579B</color>
+    <!--<color name="colorPrimary">#0A6A6E</color>-->
+    <!--<color name="colorPrimaryLight">#89B1D0</color>-->
+    <!--<color name="colorPrimaryDark">#00383C</color>-->
+    <!--<color name="colorAccent">#004c50</color>-->
+    <!--<color name="colorWhite">#FFFFFF</color>-->
+    <!--<color name="colorDirtyWhite">#FBFBFB</color>-->
+    <!--<color name="colorMediumGray">#BDC4C9</color>-->
+    <!--<color name="colorLightGray">#E0E0E0</color>-->
+    <!--<color name="colorGray">#7b8994</color>-->
+    <!--<color name="colorBlack">#000000</color>-->
+    <!--<color name="colorBlue">#01579B</color>-->
 
-    <color name="colorAcceptedYellow">#FFCD00</color>
+
+    <!--<color name="colorMostDark">#282b30</color>-->
+    <!--<color name="colorSecondDark">#303337</color>-->
+    <!--<color name="colorDark">#36393e</color>-->
+    <!--<color name="colorGray">#494c51</color>-->
+    <!--<color name="colorLightGray">#7b8994</color>-->
+    <!--<color name="colorWhite">#ffffff</color>-->
+    <!--&lt;!&ndash;<color name="colorGreen">#0A6A6E</color>&ndash;&gt;-->
+
+    <!--<color name="colorAccent">#15619d</color>-->
+    <!--<color name="colorBlue">#15619d</color>-->
+
+
+    <!--<color name="colorPrimary">#36393e</color>-->
+    <!--<color name="colorPrimaryLight">#ffffff</color>-->
+    <!--<color name="colorPrimaryDark">#303337</color>-->
+
+
+
+
+
+
+    <!--<color name="colorMostDark">#263238</color>-->
+    <!--<color name="colorSecondDark">#263238</color>-->
+    <!--<color name="colorDark">#36393e</color>-->
+    <!--<color name="colorGray">#494c51</color>-->
+    <!--<color name="colorLightGray">#7b8994</color>-->
+    <!--<color name="colorWhite">#ffffff</color>-->
+    <!--&lt;!&ndash;<color name="colorGreen">#0A6A6E</color>&ndash;&gt;-->
+
+    <!--<color name="colorAccent">#546e7a</color>-->
+    <!--<color name="colorBlue">#546e7a</color>-->
+
+
+    <!--<color name="colorPrimary">#37474f</color>-->
+    <!--<color name="colorPrimaryLight">#ffffff</color>-->
+    <!--<color name="colorPrimaryDark">#303337</color>-->
+
+
+
+
+
+
+    <!--<color name="colorMostDark">#262626</color>-->
+    <!--<color name="colorGray">#494c51</color>-->
+    <!--<color name="colorLightGray">#6d6d6d</color>-->
+    <!--<color name="colorWhite">#efefef</color>-->
+    <!--&lt;!&ndash;<color name="colorGreen">#0A6A6E</color>&ndash;&gt;-->
+
+    <!--<color name="colorAccent">#15619d</color>-->
+    <!--<color name="colorBlue">#15619d</color>-->
+
+
+    <!--<color name="colorPrimary">#373737</color>-->
+    <!--<color name="colorPrimaryLight">#efefef</color>-->
+    <!--<color name="colorPrimaryDark">#2d2d2d</color>-->
+
+
+
+
+
+
+
+
+
+
+
+
+    <color name="colorMostDark">#ffffff</color>
+    <color name="colorSecondDark">#303337</color>
+    <color name="colorDark">#36393e</color>
+    <color name="colorGray">#494c51</color>
+    <color name="colorLightGray">#7b8994</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorWrite">#747373</color>
+    <!--<color name="colorGreen">#0A6A6E</color>-->
+
+    <color name="colorAccent">#3f729b</color>
+    <color name="colorBlue">#3f729b</color>
+    <color name="colorBackground">#e4e4e4</color>
+
+
+
+    <color name="colorNews">#4b515d</color>
+    <color name="colorExam">#b73c3c</color>
+    <color name="colorHomework">#3f729b</color>
+
+
+    <color name="colorPrimary">#243a51</color>
+    <color name="colorPrimaryLight">#ffffff</color>
+    <color name="colorPrimaryDark">#243a51</color>
+
+
 </resources>

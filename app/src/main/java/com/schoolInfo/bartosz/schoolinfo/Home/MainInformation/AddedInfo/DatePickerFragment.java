@@ -1,4 +1,4 @@
-package com.schoolInfo.bartosz.schoolinfo.AddedInfo;
+package com.schoolInfo.bartosz.schoolinfo.Home.MainInformation.AddedInfo;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -16,9 +16,27 @@ import java.util.Calendar;
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
     Calendar calendar;
 
+
+    public DatePickerFragment newInstence(int year, int month, int day){
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
+
+
+        Bundle args = new Bundle();
+        args.putInt("year", year);
+        args.putInt("month", month);
+        args.putInt("day", day);
+
+        datePickerFragment.setArguments(args);
+
+        return datePickerFragment;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        int year;
+        int month;
+        int dayOfMonth;
 
 
         try{
@@ -26,10 +44,22 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
             calendar = mainActivity.getPresenter().getCalendar();
         }catch (Exception ignore){}
 
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
+
+        try{
+
+            year = getArguments().getInt("year");
+            month = getArguments().getInt("month");
+            dayOfMonth = getArguments().getInt("day");
+
+        }catch (Exception ignore){
+
+            year = calendar.get(Calendar.YEAR);
+            month = calendar.get(Calendar.MONTH);
+            dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
+
+        }
 
 
         return new DatePickerDialog(getActivity(), this, year, month, dayOfMonth);

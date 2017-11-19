@@ -1,5 +1,7 @@
 package com.schoolInfo.bartosz.schoolinfo.Home.MembersList;
 
+import android.support.v4.widget.SwipeRefreshLayout;
+
 import com.schoolInfo.bartosz.schoolinfo.MainActivity.MainActivity;
 import com.schoolInfo.bartosz.schoolinfo.Rest.MainInformationAboutUserAndClass;
 import com.schoolInfo.bartosz.schoolinfo.Rest.POJOClassInfo;
@@ -132,6 +134,10 @@ public class MembersPresenter extends MvpBasePresenter<MembersView> {
 
             }
         });
+
+    }
+
+    public void setRefreshing(boolean b) {
 
     }
 }

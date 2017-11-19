@@ -183,6 +183,10 @@ public class MembersList extends MvpFragment<MembersView, MembersPresenter> impl
 
     }
 
+    public void setRefreshing(boolean b) {
+        swipeRefreshLayout.setRefreshing(b);
+    }
+
     class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.ViewHolder> {
         LayoutInflater layoutInflater;
 
@@ -194,7 +198,6 @@ public class MembersList extends MvpFragment<MembersView, MembersPresenter> impl
         class ViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.memberListUserImage) ImageView imageView;
             @BindView(R.id.memberListUserName) TextView name;
-            @BindView(R.id.memberListLine) TextView line;
             @BindView(R.id.memberListUserStatus) TextView status;
             @BindView(R.id.acceptIcon) ImageView accept;
             @BindView(R.id.refuseIcon) ImageView refuse;
@@ -235,10 +238,6 @@ public class MembersList extends MvpFragment<MembersView, MembersPresenter> impl
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
 
-            if(position == 0)
-                holder.line.setVisibility(View.GONE);
-            else
-                holder.line.setVisibility(View.VISIBLE);
 
             if(position<requestsArrayList.size()){
 

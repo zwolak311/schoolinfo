@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -84,7 +83,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
         super.onResume();
 
         if(!tabFragment.getMainInformationAboutUserAndClass().isDateEmpty())
-            presenter.setDate(tabFragment.getMainInformationAboutUserAndClass());
+            presenter.setDate(tabFragment.getMainInformationAboutUserAndClass(), tabFragment.getTimetableMainInformation());
         else
             networkNotAvailable();
         isCreated = true;
@@ -173,6 +172,9 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
         swipeRefreshLayout.setRefreshing(false);
     }
 
+    public void setRefreshing(boolean b) {
+        swipeRefreshLayout.setRefreshing(b);
+    }
 
 
     public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -274,7 +276,7 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                 ViewHolderTimetable viewHolderTimetable = (ViewHolderTimetable) holder;
 
                 viewHolderTimetable.number.setText("" + (position));
-                viewHolderTimetable.roomNumber.setText(classList.get(position - 1));
+//                viewHolderTimetable.roomNumber.setText(classList.get(position - 1));
                 viewHolderTimetable.subject.setText(subjectList.get(position - 1));
 
             } else if (holder instanceof ViewHolderInfoHeader) {
@@ -299,14 +301,40 @@ public class HomeFragment extends MvpFragment<HomeView, HomePresenter> implement
                     viewHolderInfo.date.setVisibility(View.GONE);
                     viewHolderInfo.content.setVisibility(View.GONE);
                     viewHolderInfo.textViewForOnClick.setVisibility(View.GONE);
+                    viewHolderInfo.space.setVisibility(View.GONE);
 //                    viewHolderInfo.typeOfInfo.setVisibility(View.GONE);
 
-                    viewHolderInfo.customItem.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorDirtyWhite));
 
-                    if (position == subjectList.size() + information.size() + 2)
-                        viewHolderInfo.space.setVisibility(View.VISIBLE);
+//                    if (position == subjectList.size() + information.size() + 2)
+//                        viewHolderInfo.space.setVisibility(View.VISIBLE);
 
                 } else {
+
+                    switch (information.get((position - 2 - subjectList.size())).getType()){
+
+                        case "exam":
+
+                            viewHolderInfo.subject.setBackgroundResource(R.color.colorExam);
+
+                            break;
+
+                        case "news":
+
+                            viewHolderInfo.subject.setBackgroundResource(R.color.colorNews);
+
+
+                            break;
+
+                        case "homework":
+
+                            viewHolderInfo.subject.setBackgroundResource(R.color.colorHomework);
+
+
+                            break;
+
+
+                    }
+
 
                     viewHolderInfo.subject.setText(information.get((position - 2 - subjectList.size())).getSubject());
                     viewHolderInfo.date.setText(information.get((position - 2 - subjectList.size())).getDate());

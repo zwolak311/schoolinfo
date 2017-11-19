@@ -6,6 +6,25 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
     <TextView
         android:id="@+id/groupName"
         android:layout_width="0dp"
@@ -14,7 +33,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorWrite"
         app:layout_constraintBottom_toBottomOf="@+id/imageView7"
         app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintLeft_toRightOf="@+id/imageView7"
@@ -42,10 +61,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorBlue"
         android:padding="8dp"
         android:text="Dołącz"
-        android:textColor="@color/colorDirtyWhite"
+        android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="@+id/imageView7"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView7"
@@ -55,10 +74,7 @@
         android:id="@+id/requestInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="4dp"
-        android:background="@color/colorMediumGray"
+        android:background="@color/colorMostDark"
         android:orientation="horizontal"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"
@@ -83,9 +99,15 @@
             android:gravity="center_vertical"
             android:paddingStart="5dp"
             android:text="Wysłano proźbę o dołączenie."
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorWrite" />
 
     </LinearLayout>
+
+
+        </android.support.constraint.ConstraintLayout>
+
+
+    </android.support.v7.widget.CardView>
 
 
 </android.support.constraint.ConstraintLayout>
