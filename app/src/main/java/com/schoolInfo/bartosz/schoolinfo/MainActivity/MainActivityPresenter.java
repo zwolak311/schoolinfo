@@ -190,7 +190,6 @@ public class MainActivityPresenter extends MvpBasePresenter<MainActivityView> {
             public void onResponse(Call<TimetableMainInformation> call, Response<TimetableMainInformation> response) {
                 timetableMainInformation = response.body();
 
-                Log.d("myTimetable", "" + response.body().getMessage().get(1).getDays().get(0).getSubjects().get(0).getName());
                 loadSubjectList(groupname);
 
 
