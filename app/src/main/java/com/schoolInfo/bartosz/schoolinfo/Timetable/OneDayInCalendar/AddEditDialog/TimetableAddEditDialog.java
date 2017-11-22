@@ -103,6 +103,7 @@ public class TimetableAddEditDialog extends DialogFragment {
                         timetableFragment.setRefreshing(true);
 
 
+
                         TimetableField timetableField = new TimetableField(
                                 MainActivity.TOKEN,
                                 MainActivity.ACTIVE_USER_CLASS,

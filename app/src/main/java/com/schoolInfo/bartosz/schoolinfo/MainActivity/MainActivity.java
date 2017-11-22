@@ -62,7 +62,7 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
 
 
-    public static final int NAV_ITEM_COUNT = 6;
+    public static final int NAV_ITEM_COUNT = 5;
 
     UserBaseInformation UBI;
     POJOClassInfo pojoClassInfo;
@@ -77,6 +77,7 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
     @BindView(R.id.floatingActionButton) FloatingActionButton floatingActionButton;
     @BindView(R.id.contentView) DrawerLayout drawer;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    View header;
 
 
 //    @BindView(R.id.coordinatorLayout) CoordinatorLayout coordinatorLayout;
@@ -144,11 +145,9 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
 
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getMenu().getItem(2).setEnabled(false);
-        navigationView.getMenu().getItem(2).setVisible(false);
 
 
-        View header = navigationView.getHeaderView(0);
+        header = navigationView.getHeaderView(0);
 
         email = header.findViewById(R.id.nav_email_text);
         username = header.findViewById(R.id.nav_name_text);
@@ -257,8 +256,10 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
         super.showContent();
 
 
+        activeClassText.setText(pojoClassInfo.getName());
 
-            switch (mainInformationAboutUserAndClass.getWithScreenOnTop()) {
+
+        switch (mainInformationAboutUserAndClass.getWithScreenOnTop()) {
 
                 case TabFragment.MAIN_SCREEN:
 
@@ -283,17 +284,8 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
                         onNavigationItemSelected(navigationView.getMenu().getItem(GroupMainFragment.GROUP_SCREEN));
                         navigationView.getMenu().getItem(GroupMainFragment.GROUP_SCREEN).setChecked(true);
 
-
-
-
                     break;
 
-                case GradeFragment.GRADE_SCREEN:
-
-                    onNavigationItemSelected(navigationView.getMenu().getItem(GradeFragment.GRADE_SCREEN));
-                    navigationView.getMenu().getItem(GradeFragment.GRADE_SCREEN).setChecked(true);
-
-                    break;
 
                 case SubjectsFragment.SUBJECT_SCREEN:
 
@@ -496,7 +488,7 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
             fabSpeedDial.hide();
 
             if(timetableTabFragment.isVisible()){
-                timetableTabFragment.setDate(getPresenter().getTimetableMainInformation().getMessage());
+                timetableTabFragment.setDate(getPresenter().getTimetableMainInformation());
             }else {
                 fragmentManager.beginTransaction().replace(R.id.content_main, timetableTabFragment).commit();
             }
@@ -505,21 +497,21 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
 
 
-        }else if(id == R.id.nav_grades_list){
-
-            floatingActionButton.show();
-            fabSpeedDial.hide();
-
-
-            presenter.setTopScreen(GradeFragment.GRADE_SCREEN);
-
-
-            if(gradeFragment.isVisible()){
-//                gradeFragment.setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
-            }else {
-                fragmentManager.beginTransaction().replace(R.id.content_main, gradeFragment).commit();
-            }
-//            groupMainFragment.getPresenter().setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
+//        }else if(id == R.id.nav_grades_list){
+//
+//            floatingActionButton.show();
+//            fabSpeedDial.hide();
+//
+//
+//            presenter.setTopScreen(GradeFragment.GRADE_SCREEN);
+//
+//
+//            if(gradeFragment.isVisible()){
+////                gradeFragment.setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
+//            }else {
+//                fragmentManager.beginTransaction().replace(R.id.content_main, gradeFragment).commit();
+//            }
+////            groupMainFragment.getPresenter().setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
 
 
         }else if(id == R.id.nav_subjects_list){
@@ -528,15 +520,15 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
         fabSpeedDial.hide();
 
 
-        presenter.setTopScreen(SubjectsFragment.SUBJECT_SCREEN);
 
 
-        if(subjectsFragment.isVisible()){
-            subjectsFragment.getPresenter().setSubjectList(presenter.loadSubjectList());
-        }else {
-            fragmentManager.beginTransaction().replace(R.id.content_main, subjectsFragment).commit();
-        }
+            if(subjectsFragment.isVisible()){
+                subjectsFragment.getPresenter().setSubjectList(presenter.loadSubjectList());
+            }else {
+                fragmentManager.beginTransaction().replace(R.id.content_main, subjectsFragment).commit();
+            }
 //            groupMainFragment.getPresenter().setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
+            presenter.setTopScreen(SubjectsFragment.SUBJECT_SCREEN);
 
 
         }else if(id == R.id.nav_add_remove_membership_class){
@@ -545,7 +537,6 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
             floatingActionButton.show();
             fabSpeedDial.hide();
 
-            presenter.setTopScreen(GroupMainFragment.GROUP_SCREEN);
 
 
             if(groupMainFragment.isVisible()){
@@ -555,6 +546,8 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
             }
 //            groupMainFragment.getPresenter().setMainInformationAboutUserAndClass(mainInformationAboutUserAndClass);
 
+            presenter.setTopScreen(GroupMainFragment.GROUP_SCREEN);
+
 
         } else if (id == R.id.nav_logout) {
             logOut();
@@ -562,42 +555,44 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
         }else if (id >= NAV_ITEM_COUNT){
 
 
-            switch (mainInformationAboutUserAndClass.getWithScreenOnTop()) {
+//            switch (mainInformationAboutUserAndClass.getWithScreenOnTop()) {
+//
+//                case TabFragment.MAIN_SCREEN:
+//
+//                    tabFragment.setRefreshing(true);
+//
+//                    break;
+//                case TimetableTabFragment.TIMETABLE_SCREEN:
+//
+//
+////                    timetableTabFragment.setRefreshing(true);
+//
+//                    break;
+//                case GroupMainFragment.GROUP_SCREEN:
+//
+//                    groupMainFragment.setRefreshing(true);
+//
+//                    break;
+//
+//                case GradeFragment.GRADE_SCREEN:
+//
+//
+//
+//
+//                    break;
+//
+//                case SubjectsFragment.SUBJECT_SCREEN:
+//
+//                    subjectsFragment.setRefreshing(true);
+//
+//                    break;
+//            }
 
-                case TabFragment.MAIN_SCREEN:
-
-                    tabFragment.setRefreshing(true);
-
-                    break;
-                case TimetableTabFragment.TIMETABLE_SCREEN:
-
-
-                    timetableTabFragment.setRefreshing(true);
-
-                    break;
-                case GroupMainFragment.GROUP_SCREEN:
-
-                    groupMainFragment.setRefreshing(true);
-
-                    break;
-
-                case GradeFragment.GRADE_SCREEN:
-
-
-
-
-                    break;
-
-                case SubjectsFragment.SUBJECT_SCREEN:
-
-                    subjectsFragment.setRefreshing(true);
-
-                    break;
-            }
+            setRefreshing(true);
 
             ACTIVE_USER_CLASS = UBI.getGroups().get(id - NAV_ITEM_COUNT).getGroupname();
 
-            loadData(true);
+            loadData(false);
         }
 
 
@@ -711,14 +706,14 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
         switch (presenter.getMainInformationAboutUserAndClass().getWithScreenOnTop()){
 
-            case GradeFragment.GRADE_SCREEN:
+//            case GradeFragment.GRADE_SCREEN:
+//
+//
+//                AddGrade addGrade = new AddGrade();
+//                addGrade.show(getSupportFragmentManager(), "Dodaj ocene");
 
 
-                AddGrade addGrade = new AddGrade();
-                addGrade.show(getSupportFragmentManager(), "Dodaj ocene");
-
-
-                break;
+//                break;
             case  SubjectsFragment.SUBJECT_SCREEN:
 
                 AddSubject addSubject = new AddSubject().newInstance("", -1);
@@ -884,11 +879,11 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
                         break;
 
-                    case GradeFragment.GRADE_SCREEN:
-
-                            getSupportActionBar().setTitle("Oceny");
-
-                        break;
+//                    case GradeFragment.GRADE_SCREEN:
+//
+//                            getSupportActionBar().setTitle("Oceny");
+//
+//                        break;
 
                     case SubjectsFragment.SUBJECT_SCREEN:
 
@@ -942,11 +937,11 @@ public class MainActivity extends MvpLceViewStateActivity<DrawerLayout, MainInfo
 
                     break;
 
-                case GradeFragment.GRADE_SCREEN:
-
+//                case GradeFragment.GRADE_SCREEN:
+//
 //                    gradeFragment.setRefreshing(b);
-
-                    break;
+//
+//                    break;
 
                 case SubjectsFragment.SUBJECT_SCREEN:
 

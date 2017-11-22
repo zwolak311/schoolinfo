@@ -15,4 +15,5 @@ public interface TimetableView extends MvpView {
 
     void setTimetableEditDate(int subject, int dayId , int sort, String classNum);
 
+    void networkNotAvailable();
 }

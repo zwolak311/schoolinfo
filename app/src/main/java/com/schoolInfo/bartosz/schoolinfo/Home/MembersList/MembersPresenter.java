@@ -65,7 +65,7 @@ public class MembersPresenter extends MvpBasePresenter<MembersView> {
 
         if (getView() != null) {
 
-            if (mainInformationAboutUserAndClass != null) {
+            if (!mainInformationAboutUserAndClass.isDateEmpty()) {
                 POJOClassInfo pojoClassInfo = mainInformationAboutUserAndClass.getPojoClassInfo();
 
                 membersArrayList = pojoClassInfo.getMembers();

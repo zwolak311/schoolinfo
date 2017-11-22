@@ -59,10 +59,8 @@ public class MembersList extends MvpFragment<MembersView, MembersPresenter> impl
             @Override
             public void onRefresh() {
 
-//                tabFragment.isCreateFirstTime = true;
 
                 MainActivity mainActivity = (MainActivity) getActivity();
-//                mainActivity.refreshUBI();
                 mainActivity.loadData(true);
 
             }

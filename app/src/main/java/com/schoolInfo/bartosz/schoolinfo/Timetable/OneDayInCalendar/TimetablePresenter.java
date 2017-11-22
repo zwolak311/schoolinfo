@@ -1,7 +1,5 @@
 package com.schoolInfo.bartosz.schoolinfo.Timetable.OneDayInCalendar;
 
-import android.util.Log;
-import android.widget.Space;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
@@ -32,14 +30,18 @@ public class TimetablePresenter extends MvpBasePresenter<TimetableView> {
         }
 
 
-        if(getView()!= null)
+        if(getView()!= null) {
             getView().setDate(subjects, classNumb, listTime);
-
+        }
     }
 
-    public void getDate(){
+    public void getDate(int dayId){
 
-        getView().getDate();
+        if(dayId>=0){
+            getView().getDate();
+        }else {
+            getView().networkNotAvailable();
+        }
 
 
 //        getView().setDate(subjects, classNumb);
@@ -50,12 +52,12 @@ public class TimetablePresenter extends MvpBasePresenter<TimetableView> {
     public void editTimetable(int adapterPosition) {
 
 
-        if(adapterPosition < day.getSubjects().size()) {
+        if(adapterPosition < subjects.size()) {
             TimetableMainInformation.Message.Days.Subject.Pivot pivot = day.getSubjects().get(adapterPosition).getPivot();
             getView().setTimetableEditDate(pivot.getSubject_id(), pivot.getDay_id(), pivot.getSort(), pivot.getRoom());
 
         }else {
-            getView().setTimetableEditDate(-1, day.getId(), adapterPosition + 1, "");
+            getView().setTimetableEditDate(-1, day.getId(), (adapterPosition + 2), "");
         }
 
 

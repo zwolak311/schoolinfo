@@ -60,12 +60,6 @@ public class LoginRegisterActivity extends AppCompatActivity {
 //    }
 
 
-    @OnClick(R.id.registerWithGoogle)
-    void registerWithGoogle(){
-
-        Toast.makeText(this, "google", Toast.LENGTH_SHORT).show();
-
-    }
 
     @OnClick(R.id.register)
     void register(){

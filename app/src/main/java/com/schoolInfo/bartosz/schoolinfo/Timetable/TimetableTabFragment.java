@@ -76,11 +76,44 @@ public class TimetableTabFragment extends Fragment {
 
         isCreateFirstTime = true;
 
-        timetableFragmentMon = TimetableFragment.setDay(MON);
-        timetableFragmentTue = TimetableFragment.setDay(TUE);
-        timetableFragmentWed = TimetableFragment.setDay(WAD);
-        timetableFragmentThu = TimetableFragment.setDay(THU);
-        timetableFragmentFri = TimetableFragment.setDay(FRI);
+
+
+
+
+
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+
+        if(mainActivity.getPresenter().getTimetableMainInformation() != null) {
+            for (TimetableMainInformation.Message messageLoop : mainActivity.getPresenter().getTimetableMainInformation().getMessage()) {
+                if (messageLoop.getGroupname().equals(MainActivity.ACTIVE_USER_CLASS))
+                    currentGroup = messageLoop;
+            }
+
+            timetableFragmentMon = TimetableFragment.setDay(MON);
+            timetableFragmentTue = TimetableFragment.setDay(TUE);
+            timetableFragmentWed = TimetableFragment.setDay(WAD);
+            timetableFragmentThu = TimetableFragment.setDay(THU);
+            timetableFragmentFri = TimetableFragment.setDay(FRI);
+
+        }else {
+
+
+            timetableFragmentMon = TimetableFragment.setDay(-1);
+            timetableFragmentTue = TimetableFragment.setDay(-1);
+            timetableFragmentWed = TimetableFragment.setDay(-1);
+            timetableFragmentThu = TimetableFragment.setDay(-1);
+            timetableFragmentFri = TimetableFragment.setDay(-1);
+
+
+        }
+
 
 
 
@@ -155,50 +188,58 @@ public class TimetableTabFragment extends Fragment {
 
                 break;
         }
-        return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void setDate(TimetableMainInformation timetableMainInfo) {
 
-        MainActivity mainActivity = (MainActivity) getActivity();
-        for (TimetableMainInformation.Message messageLoop : mainActivity.getPresenter().getTimetableMainInformation().getMessage()) {
-            if(messageLoop.getGroupname().equals(MainActivity.ACTIVE_USER_CLASS))
-                currentGroup = messageLoop;
+        if (timetableMainInfo != null) {
+            for (TimetableMainInformation.Message messageLoop : timetableMainInfo.getMessage()) {
+                if (messageLoop.getGroupname().equals(MainActivity.ACTIVE_USER_CLASS))
+                    this.currentGroup = messageLoop;
+            }
+
+
+            if (timetableFragmentMon.isVisible())
+                setTimetable(0);
+
+
+            if (timetableFragmentTue.isVisible())
+                setTimetable(1);
+
+
+            if (timetableFragmentWed.isVisible())
+                setTimetable(2);
+
+
+            if (timetableFragmentThu.isVisible())
+                setTimetable(3);
+
+
+            if (timetableFragmentFri.isVisible())
+                setTimetable(4);
+
+        }else {
+
+            if (timetableFragmentMon.isVisible())
+                timetableFragmentMon.networkNotAvailable();
+
+
+            if (timetableFragmentTue.isVisible())
+                timetableFragmentTue.networkNotAvailable();
+
+            if (timetableFragmentWed.isVisible())
+                timetableFragmentWed.networkNotAvailable();
+
+            if (timetableFragmentThu.isVisible())
+                timetableFragmentThu.networkNotAvailable();
+
+            if (timetableFragmentFri.isVisible())
+                timetableFragmentFri.networkNotAvailable();
+
         }
 
 
 
-
-    }
-
-    public void setDate(ArrayList<TimetableMainInformation.Message> message){
-
-        for (TimetableMainInformation.Message messageLoop : message) {
-            if(messageLoop.getGroupname().equals(MainActivity.ACTIVE_USER_CLASS))
-                this.currentGroup = messageLoop;
-        }
-
-
-        if(timetableFragmentMon.isVisible())
-            setTimetable(0);
-
-
-        if(timetableFragmentTue.isVisible())
-            setTimetable(1);
-
-
-        if(timetableFragmentWed.isVisible())
-            setTimetable(2);
-
-
-        if(timetableFragmentThu.isVisible())
-            setTimetable(3);
-
-
-        if(timetableFragmentFri.isVisible())
-            setTimetable(4);
 
     }
 
@@ -206,79 +247,80 @@ public class TimetableTabFragment extends Fragment {
     public void setTimetable(int today){
         this.day = today;
 
-        switch (today) {
+
+//        if(currentGroup!=null) {
+
+            switch (today) {
 
 
-            case MON:
+                case MON:
 
 
-
-                for (TimetableMainInformation.Message.Days day: currentGroup.getDays()) {
-                    if(day.getName().equals("monday")) {
-                        currentDay = day;
+                    for (TimetableMainInformation.Message.Days day : currentGroup.getDays()) {
+                        if (day.getName().equals("monday")) {
+                            currentDay = day;
+                        }
                     }
-                }
 
 
-                timetableFragmentMon.getPresenter().setDate(currentDay);
+                    timetableFragmentMon.getPresenter().setDate(currentDay);
 
-                break;
+                    break;
 
-            case TUE:
-
-
-                for (TimetableMainInformation.Message.Days day: currentGroup.getDays()) {
-                    if(day.getName().equals("tuesday"))
-                        currentDay = day;
-                }
+                case TUE:
 
 
-                timetableFragmentTue.getPresenter().setDate(currentDay);
-
-                break;
-
-            case WAD:
-
-
-                for (TimetableMainInformation.Message.Days day: currentGroup.getDays()) {
-                    if(day.getName().equals("wednesday"))
-                        currentDay = day;
-                }
+                    for (TimetableMainInformation.Message.Days day : currentGroup.getDays()) {
+                        if (day.getName().equals("tuesday"))
+                            currentDay = day;
+                    }
 
 
-                timetableFragmentWed.getPresenter().setDate(currentDay);
+                    timetableFragmentTue.getPresenter().setDate(currentDay);
 
-                break;
+                    break;
 
-            case THU:
-
-
-
-                for (TimetableMainInformation.Message.Days day: currentGroup.getDays()) {
-                    if(day.getName().equals("thursday"))
-                        currentDay = day;
-                }
+                case WAD:
 
 
-                timetableFragmentThu.getPresenter().setDate(currentDay);
-
-                break;
-
-            case FRI:
-
-
-                for (TimetableMainInformation.Message.Days day: currentGroup.getDays()) {
-                    if(day.getName().equals("friday"))
-                        currentDay= day;
-                }
+                    for (TimetableMainInformation.Message.Days day : currentGroup.getDays()) {
+                        if (day.getName().equals("wednesday"))
+                            currentDay = day;
+                    }
 
 
-                timetableFragmentFri.getPresenter().setDate(currentDay);
+                    timetableFragmentWed.getPresenter().setDate(currentDay);
 
-                break;
+                    break;
 
-        }
+                case THU:
 
+
+                    for (TimetableMainInformation.Message.Days day : currentGroup.getDays()) {
+                        if (day.getName().equals("thursday"))
+                            currentDay = day;
+                    }
+
+
+                    timetableFragmentThu.getPresenter().setDate(currentDay);
+
+                    break;
+
+                case FRI:
+
+
+                    for (TimetableMainInformation.Message.Days day : currentGroup.getDays()) {
+                        if (day.getName().equals("friday"))
+                            currentDay = day;
+                    }
+
+
+                    timetableFragmentFri.getPresenter().setDate(currentDay);
+
+                    break;
+
+            }
+//        }
 
     }
 
@@ -305,18 +347,18 @@ public class TimetableTabFragment extends Fragment {
 
 
         if(timetableFragmentTue.isVisible())
-            timetableFragmentMon.setRefreshing(b);
+            timetableFragmentTue.setRefreshing(b);
 
 
         if(timetableFragmentWed.isVisible())
-            timetableFragmentMon.setRefreshing(b);
+            timetableFragmentWed.setRefreshing(b);
 
 
         if(timetableFragmentThu.isVisible())
-            timetableFragmentMon.setRefreshing(b);
+            timetableFragmentThu.setRefreshing(b);
 
         if(timetableFragmentFri.isVisible())
-            timetableFragmentMon.setRefreshing(b);
+            timetableFragmentFri.setRefreshing(b);
 
 
     }

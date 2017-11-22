@@ -39,17 +39,20 @@ public class HomePresenter extends MvpBasePresenter<HomeView> {
 
         this.mainInformationAboutUserAndClass = mainInformationAboutUserAndClass;
 
+        if(timetableMainInformation!=null) {
+            for (TimetableMainInformation.Message groupName : timetableMainInformation.getMessage()) {
+                if (groupName.getGroupname().equals(MainActivity.ACTIVE_USER_CLASS))
+                    this.group = groupName;
+            }
 
-        for (TimetableMainInformation.Message groupName: timetableMainInformation.getMessage()) {
-            if(groupName.getGroupname().equals(MainActivity.ACTIVE_USER_CLASS))
-                this.group = groupName;
+
+            setTimetable();
+        }else{
+
+            if(getView()!=null)
+                getView().networkNotAvailable();
+
         }
-
-
-//        this.tim = timetableMainInformation;
-
-
-        setTimetable();
 
     }
 

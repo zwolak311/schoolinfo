@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,12 @@ import butterknife.OnClick;
 public class TimetableFragment extends MvpFragment<TimetableView, TimetablePresenter> implements TimetableView {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.contentView) SwipeRefreshLayout swipeRefreshLayout;
+
+    @BindView(R.id.faceImage) ImageView faceImage;
+    @BindView(R.id.underIconText) TextView underIconText;
+    @BindView(R.id.secondUnderIconText) TextView secondUnderIconText;
+    @BindView(R.id.secondUnderLayout) LinearLayout underLayout;
+    @BindView(R.id.retryUnderIconText) TextView retryUnderIconText;
 //    @BindView(R.id.recycle_layout) RecyclerView recycleLayout;
 
     List<String> subjects;
@@ -82,7 +90,7 @@ public class TimetableFragment extends MvpFragment<TimetableView, TimetablePrese
     public void onResume() {
         super.onResume();
 
-        presenter.getDate();
+        presenter.getDate(getArguments().getInt("dayId", -1));
 
 
     }
@@ -109,6 +117,28 @@ public class TimetableFragment extends MvpFragment<TimetableView, TimetablePrese
 
     }
 
+    @Override
+    public void networkNotAvailable() {
+
+        recyclerView.setVisibility(View.GONE);
+
+        faceImage.setImageResource(R.drawable.cloud_off);
+        faceImage.setVisibility(View.VISIBLE);
+
+        underIconText.setVisibility(View.VISIBLE);
+        underIconText.setText("Jesteś w trybie offline.");
+
+        underLayout.setVisibility(View.VISIBLE);
+
+        secondUnderIconText.setVisibility(View.VISIBLE);
+        secondUnderIconText.setText("Połącz się z internetem i ");
+
+        retryUnderIconText.setVisibility(View.VISIBLE);
+        retryUnderIconText.setText("spróbuj ponownie.");
+
+        swipeRefreshLayout.setRefreshing(false);
+
+    }
 
     @Override
     public void setTimetableEditDate(int subject, int dayId, int sort, String classNum) {

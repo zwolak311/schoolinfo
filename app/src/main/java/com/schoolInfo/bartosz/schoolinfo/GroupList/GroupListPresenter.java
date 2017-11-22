@@ -1,5 +1,7 @@
 package com.schoolInfo.bartosz.schoolinfo.GroupList;
 
+import android.util.Log;
+
 import com.schoolInfo.bartosz.schoolinfo.MainActivity.MainActivity;
 import com.schoolInfo.bartosz.schoolinfo.Rest.MainInformationAboutUserAndClass;
 import com.schoolInfo.bartosz.schoolinfo.Rest.Requests;
@@ -32,10 +34,10 @@ public class GroupListPresenter extends MvpBasePresenter<GroupListView> {
     public GroupListPresenter() {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        logging.setLevel(HttpLoggingInterceptor.Level.NONE);
 
         OkHttpClient.Builder okHttpClient = new OkHttpClient.Builder();
-        okHttpClient.addInterceptor(logging);
+//        okHttpClient.addInterceptor(logging);
         okHttpClient.readTimeout(15, TimeUnit.SECONDS);
         okHttpClient.connectTimeout(15, TimeUnit.SECONDS);
 

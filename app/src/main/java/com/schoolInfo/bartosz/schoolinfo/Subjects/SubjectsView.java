@@ -9,4 +9,6 @@ public interface SubjectsView extends MvpView {
 
     void listIsEmpty();
 
+
+    void networkNotAvailable();
 }

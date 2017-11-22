@@ -106,17 +106,17 @@ public class TabFragment extends Fragment {
 
     public void refreshPojoClass(MainInformationAboutUserAndClass mainInformationAboutUserAndClass, TimetableMainInformation timetableMainInformation) {
 
-        if(homeFragment != null) {
+        if(homeFragment != null ) {
 
 
 //            this.pojoClassInfo = mainInformationAboutUserAndClass.getPojoClassInfo();
 //            this.UBI = mainInformationAboutUserAndClass.getUBI();
 
 //            if (pojoClassInfo != null && UBI != null) {
-                if (homeFragment.isCreated())
+                if (homeFragment.isVisible())
                     homeFragment.getPresenter().setDate(mainInformationAboutUserAndClass, timetableMainInformation);
 
-                if (informationFragment.isCreate())
+                if (informationFragment.isVisible())
                     informationFragment.getPresenter().setRecycleView(mainInformationAboutUserAndClass);
 
                 if (membersList.isCreate())

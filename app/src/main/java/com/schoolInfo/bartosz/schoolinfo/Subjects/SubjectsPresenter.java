@@ -64,14 +64,18 @@ public class SubjectsPresenter extends MvpBasePresenter<SubjectsView> {
 
     private void setView() {
 
+        if (getView() != null) {
 
-        if(subjectList.getMessage().size() == 0){
+            if (subjectList != null)
+                getView().setViewOfSubjectList(subjectList);
+            else if(subjectList == null)
+                getView().networkNotAvailable();
+            else if (subjectList.getMessage().size() == 0)
 
-            getView().listIsEmpty();
+                getView().listIsEmpty();
 
-        }else
-            getView().setViewOfSubjectList(subjectList);
 
+
+        }
     }
-
 }

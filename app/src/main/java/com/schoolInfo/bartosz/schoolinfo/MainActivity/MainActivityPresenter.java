@@ -92,6 +92,7 @@ public class MainActivityPresenter extends MvpBasePresenter<MainActivityView> {
                 UBI = response.body();
 
                 if(className == null) {
+                    mainInformationAboutUserAndClass.setDateEmpty(false);
                     getInfoAboutClass(response.body().getGroups().get(0).getGroupname());
 
                 }else {
@@ -101,9 +102,12 @@ public class MainActivityPresenter extends MvpBasePresenter<MainActivityView> {
 
             @Override
             public void onFailure(@NonNull Call<UserBaseInformation> call, @NonNull Throwable t) {
-                mainInformationAboutUserAndClass = new MainInformationAboutUserAndClass();
+//                mainInformationAboutUserAndClass = new MainInformationAboutUserAndClass();
 
-//                mainInformationAboutUserAndClass.setDateEmpty(true);
+                mainInformationAboutUserAndClass.setDateEmpty(true);
+                subjectList = null;
+                timetableMainInformation = null;
+
 
                 if(getView() != null) {
                     getView().setData(mainInformationAboutUserAndClass);
@@ -135,8 +139,11 @@ public class MainActivityPresenter extends MvpBasePresenter<MainActivityView> {
 
             @Override
             public void onFailure(@NonNull Call<POJOClassInfo> call, @NonNull Throwable t) {
-                mainInformationAboutUserAndClass = new MainInformationAboutUserAndClass();
-//                mainInformationAboutUserAndClass.setDateEmpty(true);
+//                mainInformationAboutUserAndClass = new MainInformationAboutUserAndClass();
+                mainInformationAboutUserAndClass.setDateEmpty(true);
+                subjectList = null;
+                timetableMainInformation = null;
+
 
                 if(getView() != null) {
                     getView().setData(mainInformationAboutUserAndClass);
@@ -169,6 +176,8 @@ public class MainActivityPresenter extends MvpBasePresenter<MainActivityView> {
 
             @Override
             public void onFailure(Call<SubjectList> call, Throwable t) {
+                subjectList = null;
+                timetableMainInformation = null;
 
             }
         });
@@ -197,7 +206,8 @@ public class MainActivityPresenter extends MvpBasePresenter<MainActivityView> {
 
             @Override
             public void onFailure(Call<TimetableMainInformation> call, Throwable t) {
-                Log.d("myTimetable", "" + t.toString());
+                subjectList = null;
+                timetableMainInformation = null;
             }
         });
 

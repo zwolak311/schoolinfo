@@ -4,7 +4,7 @@ package com.schoolInfo.bartosz.schoolinfo.Rest;
 import java.util.ArrayList;
 
 public class POJOClassInfo {
-    String groupname, status;
+    String groupname, status, name;
     Owner owner;
     ArrayList<Members> members = new ArrayList<>();
     ArrayList<Requests> requests = new ArrayList<>();
@@ -12,6 +12,15 @@ public class POJOClassInfo {
     ArrayList<Exam> exams = new ArrayList<>();
     Plan plan;
     User user;
+
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public User getUser() {
 

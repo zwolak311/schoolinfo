@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,9 +28,13 @@ import butterknife.OnClick;
 public class SubjectsFragment extends MvpFragment<SubjectsView, SubjectsPresenter> implements  SubjectsView {
     @BindView(R.id.recycler_view) RecyclerView recyclerView;
     @BindView(R.id.contentView) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.faceImage) ImageView faceImage;
+    @BindView(R.id.underIconText) TextView underIconText;
+    @BindView(R.id.secondUnderIconText) TextView secondUnderIconText;
+    @BindView(R.id.secondUnderLayout) LinearLayout underLayout;
+    @BindView(R.id.retryUnderIconText) TextView retryUnderIconText;
     SubjectList subjectList;
-
-    public static final int SUBJECT_SCREEN = 3;
+    public static final int SUBJECT_SCREEN = 2;
 
 
 
@@ -40,8 +46,16 @@ public class SubjectsFragment extends MvpFragment<SubjectsView, SubjectsPresente
         ButterKnife.bind(this, view);
 
 
-        swipeRefreshLayout.setEnabled(false);
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.loadData(false);
+
+            }
+        });
 
 
 
@@ -90,8 +104,41 @@ public class SubjectsFragment extends MvpFragment<SubjectsView, SubjectsPresente
     @Override
     public void listIsEmpty() {
 
+        recyclerView.setVisibility(View.GONE);
+        faceImage.setImageResource(R.drawable.face_smile);
+        faceImage.setVisibility(View.VISIBLE);
+
+        underIconText.setVisibility(View.VISIBLE);
+        underIconText.setText("Lista jest pusta.");
+
+        secondUnderIconText.setVisibility(View.VISIBLE);
+        secondUnderIconText.setText("Brak zdefiniowanych przedmiotów.");
+
+
+        setRefreshing(false);
+
     }
 
+    @Override
+    public void networkNotAvailable() {
+        recyclerView.setVisibility(View.GONE);
+
+        faceImage.setImageResource(R.drawable.cloud_off);
+        faceImage.setVisibility(View.VISIBLE);
+
+        underIconText.setVisibility(View.VISIBLE);
+        underIconText.setText("Jesteś w trybie offline.");
+
+        underLayout.setVisibility(View.VISIBLE);
+
+        secondUnderIconText.setVisibility(View.VISIBLE);
+        secondUnderIconText.setText("Połącz się z internetem i ");
+
+        retryUnderIconText.setVisibility(View.VISIBLE);
+        retryUnderIconText.setText("spróbuj ponownie.");
+
+        swipeRefreshLayout.setRefreshing(false);
+    }
 
     class SubjectAdapter extends RecyclerView.Adapter<SubjectAdapter.ViewHolder>{
 

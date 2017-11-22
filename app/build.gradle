@@ -9,8 +9,8 @@ android {
         applicationId "com.schoolinfo.bartosz.schoolinfo"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 17
-        versionName "1.17"
+        versionCode 22
+        versionName "1.22"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

@@ -40,7 +40,7 @@ public class GroupMainFragment extends MvpFragment<GroupListView, GroupListPrese
     @BindView(R.id.retryUnderIconText) TextView retryUnderIconText;
 
 
-    public static final int GROUP_SCREEN = 4;
+    public static final int GROUP_SCREEN = 3;
 
 
 
